@@ -5,6 +5,9 @@
  */
 package trabalhofinalsd;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+
 /**
  *
  * @author utfpr
@@ -48,6 +51,18 @@ public class telaLogin extends javax.swing.JFrame {
         btEntrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btEntrarActionPerformed(evt);
+            }
+        });
+
+        txtLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLoginKeyPressed(evt);
+            }
+        });
+
+        txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSenhaKeyPressed(evt);
             }
         });
 
@@ -96,6 +111,10 @@ public class telaLogin extends javax.swing.JFrame {
 
     private void btEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarActionPerformed
         // TODO add your handling code here:
+        entrar();
+    }//GEN-LAST:event_btEntrarActionPerformed
+
+    public void entrar(){
         if(txtLogin.getText().equals("admin") && txtSenha.getText().equals("admin")){
             System.out.println("Logado como admin");
             telaServidor ts = new telaServidor();
@@ -106,8 +125,20 @@ public class telaLogin extends javax.swing.JFrame {
            telaUsuario tu = new telaUsuario();
            tu.setVisible(true);
         }
-        dispose();
-    }//GEN-LAST:event_btEntrarActionPerformed
+        this.dispose();
+    }
+    
+    private void txtSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            entrar();
+        }
+    }//GEN-LAST:event_txtSenhaKeyPressed
+
+    private void txtLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoginKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            entrar();
+        }
+    }//GEN-LAST:event_txtLoginKeyPressed
 
     /**
      * @param args the command line arguments
