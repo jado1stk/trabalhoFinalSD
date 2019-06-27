@@ -5,6 +5,16 @@
  */
 package trabalhofinalsd;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import usuarios.Users;
+
 /**
  *
  * @author utfpr
@@ -17,6 +27,23 @@ public class telaUsuario extends javax.swing.JFrame {
     public telaUsuario() {
         initComponents();
         setLocationRelativeTo(this);
+        initJList();
+        System.out.println(Arrays.toString(new File(Users.getPathAtual()).list()));
+    }
+    
+    public final void initJList()
+    {
+        listaDir.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = new File(Users.getPathAtual()).list();
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        listaDir.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        if(Users.getPathAtual().equals("/home/renan/trabDrive/" + Users.getNome() + "/"))
+        {
+            backDir.setEnabled(false);
+            enterDir.setEnabled(false);
+        }
     }
 
     /**
@@ -28,32 +55,214 @@ public class telaUsuario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jFileChooser1 = new javax.swing.JFileChooser();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu6 = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPopupMenu2 = new javax.swing.JPopupMenu();
+        jPopupMenu3 = new javax.swing.JPopupMenu();
+        jPopupMenu4 = new javax.swing.JPopupMenu();
+        nomeUser = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaDir = new javax.swing.JList<>();
+        enterDir = new javax.swing.JButton();
+        backDir = new javax.swing.JButton();
+        download = new javax.swing.JButton();
+        upload = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jMenu1.setText("jMenu1");
 
-        jLabel1.setText("Caraca tu é o usuario manipulado, tu é um bosta");
+        jMenu2.setText("jMenu2");
+
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
+
+        jMenu6.setText("File");
+        jMenuBar2.add(jMenu6);
+
+        jMenu7.setText("Edit");
+        jMenuBar2.add(jMenu7);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
+        nomeUser.setText("<html>Logado como:<b> " + Users.getNome() + "</b></html>");
+
+        listaDir.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listaDirValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listaDir);
+
+        enterDir.setText("Entrar na Pasta");
+        enterDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enterDirActionPerformed(evt);
+            }
+        });
+
+        backDir.setText("Voltar");
+        backDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backDirActionPerformed(evt);
+            }
+        });
+
+        download.setText("Download");
+
+        upload.setText("Upload");
+
+        jMenu3.setText("Arquivos");
+
+        jMenuItem1.setText("Novo Diretório");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu4.setText("Editar");
+        jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("Tipo de Consulta");
+        jMenuBar1.add(jMenu5);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(181, 181, 181)
-                .addComponent(jLabel1)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(nomeUser)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(backDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(enterDir, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
+                            .addComponent(download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(202, 202, 202)
-                .addComponent(jLabel1)
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(nomeUser)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(enterDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(backDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(download, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        telaLogin tl = new telaLogin();
+        tl.setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        ImageIcon newDirectory = new ImageIcon("/home/renan/trabDrive/icons/newFolder.png");
+        String newFolder = JOptionPane.showInputDialog(this, "Escolha o nome para o novo diretório", "Novo diretório", 1, newDirectory, null, "").toString();
+        if(newFolder != null)
+        {
+            Users.setPathAtual(Users.getPathAtual() + newFolder + "/");
+            addToJList(newFolder);
+            new File(Users.getPathAtual()).mkdirs();
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void enterDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterDirActionPerformed
+        // TODO add your handling code here:
+        Users.setPathAtual(Users.getPathAtual() + listaDir.getSelectedValue() + "/");
+        refreshJList();
+    }//GEN-LAST:event_enterDirActionPerformed
+
+    private void backDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backDirActionPerformed
+        // TODO add your handling code here:
+            String pwd = new File(Users.getPathAtual()).getName() + "/";
+            Users.setPathAtual(Users.getPathAtual().replace(pwd, ""));
+            refreshJList();
+    }//GEN-LAST:event_backDirActionPerformed
+
+    private void listaDirValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaDirValueChanged
+        // TODO add your handling code here:
+        if(listaDir.isSelectionEmpty() || listaDir.getSelectedValue().contains(".txt") || listaDir.getSelectedValue().contains(".doc") || listaDir.getSelectedValue().contains(".pdf") )
+        {
+            enterDir.setEnabled(false);
+        }
+        else
+        {
+            enterDir.setEnabled(true);
+        }
+    }//GEN-LAST:event_listaDirValueChanged
+
+    public void addToJList(String newFolder)
+    {
+        DefaultListModel dlm = new DefaultListModel();
+        for(int i = 0; i < listaDir.getModel().getSize(); i++)
+        {
+            dlm.addElement(listaDir.getModel().getElementAt(i));
+        }
+        dlm.addElement(newFolder);
+        listaDir.setModel(dlm);
+    }
+    
+    public void refreshJList()
+    {
+        DefaultListModel dlm = new DefaultListModel();
+        String[] strings = new File(Users.getPathAtual()).list();
+        for(int i = 0; i < strings.length; i++)
+        {
+            dlm.addElement(strings[i]);
+        }
+        listaDir.setModel(dlm);
+        String pwd = new File(Users.getPathAtual()).getAbsolutePath();
+        System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
+        if(pwd.equals("/home/renan/trabDrive/" + Users.getNome()))
+        {
+            backDir.setEnabled(false);
+        }
+        else
+        {
+            backDir.setEnabled(true);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -90,6 +299,28 @@ public class telaUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton backDir;
+    private javax.swing.JButton download;
+    private javax.swing.JButton enterDir;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JPopupMenu jPopupMenu3;
+    private javax.swing.JPopupMenu jPopupMenu4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> listaDir;
+    private javax.swing.JLabel nomeUser;
+    private javax.swing.JButton upload;
     // End of variables declaration//GEN-END:variables
 }
