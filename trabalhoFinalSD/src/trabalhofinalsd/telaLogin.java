@@ -121,7 +121,7 @@ public class telaLogin extends javax.swing.JFrame {
             else if(senha.verificaUsers(txtLogin.getText(), pass))
             {
                 Users.setNome(txtLogin.getText());
-                Users.setPathAtual("/home/renan/trabDrive/" + Users.getNome() + "/");
+                Users.setPathAtual(Users.path + Users.getNome() + "/");
                 telaUsuario tu = new telaUsuario();
                 tu.setVisible(true);
                 dispose();

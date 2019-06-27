@@ -143,13 +143,13 @@ public class telaRegister extends javax.swing.JFrame {
         try {
             if(userName.getText().length() > 2 && Arrays.equals(password.getPassword(), confirmPass.getPassword()) && !m.verificaUsers(userName.getText(), pass) && pass.length() > 7)
             {
-                FileWriter fw = new FileWriter("/home/renan/trabDrive/users.txt", true);
+                FileWriter fw = new FileWriter(Users.path + "users.txt", true);
                 BufferedWriter con = new BufferedWriter(fw);
                 String s = userName.getText() + " " + m.getMd5(pass);
                 con.write(s);
                 con.newLine();
                 con.close();
-                Users.setPathAtual("/home/renan/trabDrive/" + userName.getText() + "/");
+                Users.setPathAtual(Users.path + userName.getText() + "/");
                 new File(Users.getPathAtual()).mkdirs();
                 telaUsuario tu = new telaUsuario();
                 Users.setNome(userName.getText());

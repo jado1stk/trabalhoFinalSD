@@ -6,13 +6,18 @@
 package trabalhofinalsd;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JList;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import org.apache.commons.io.FilenameUtils;
 import usuarios.Users;
 
 /**
@@ -28,7 +33,7 @@ public class telaUsuario extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(this);
         initJList();
-        System.out.println(Arrays.toString(new File(Users.getPathAtual()).list()));
+        //System.out.println(Arrays.toString(new File(Users.getPathAtual()).list()));
     }
     
     public final void initJList()
@@ -39,12 +44,14 @@ public class telaUsuario extends javax.swing.JFrame {
             public String getElementAt(int i) { return strings[i]; }
         });
         listaDir.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        if(Users.getPathAtual().equals("/home/renan/trabDrive/" + Users.getNome() + "/"))
+        if(Users.getPathAtual().equals(Users.path + Users.getNome() + "/"))
         {
             backDir.setEnabled(false);
             enterDir.setEnabled(false);
+            download.setEnabled(false);
         }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -123,6 +130,11 @@ public class telaUsuario extends javax.swing.JFrame {
         });
 
         download.setText("Download");
+        download.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                downloadActionPerformed(evt);
+            }
+        });
 
         upload.setText("Upload");
 
@@ -196,8 +208,8 @@ public class telaUsuario extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        ImageIcon newDirectory = new ImageIcon("/home/renan/trabDrive/icons/newFolder.png");
-        String newFolder = JOptionPane.showInputDialog(this, "Escolha o nome para o novo diretório", "Novo diretório", 1, newDirectory, null, "").toString();
+        ImageIcon iconNewDirectory = new ImageIcon(Users.path + "icons/newFolder.png");
+        String newFolder = JOptionPane.showInputDialog(this, "Escolha o nome para o novo diretório", "Novo diretório", 1, iconNewDirectory, null, "").toString();
         if(newFolder != null)
         {
             Users.setPathAtual(Users.getPathAtual() + newFolder + "/");
@@ -221,16 +233,61 @@ public class telaUsuario extends javax.swing.JFrame {
 
     private void listaDirValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaDirValueChanged
         // TODO add your handling code here:
-        if(listaDir.isSelectionEmpty() || listaDir.getSelectedValue().contains(".txt") || listaDir.getSelectedValue().contains(".doc") || listaDir.getSelectedValue().contains(".pdf") )
+        File f = new File(Users.getPathAtual() + listaDir.getSelectedValue());
+        if(listaDir.isSelectionEmpty())
         {
             enterDir.setEnabled(false);
         }
-        else
+        else if(f.isDirectory())
         {
             enterDir.setEnabled(true);
+            download.setEnabled(false);
+        }
+        else
+        {
+            download.setEnabled(true);
+            enterDir.setEnabled(false);
         }
     }//GEN-LAST:event_listaDirValueChanged
 
+    private void downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadActionPerformed
+        
+        JFileChooser to = new JFileChooser();
+        to.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        //String extensao = FilenameUtils.getExtension(to.getSelectedFile().getAbsolutePath());
+        int result = to.showSaveDialog(null);
+        File from = new File(Users.getPathAtual() + listaDir.getSelectedValue());
+        if (result == 0)
+        {
+            try {
+                copyFile(from, to.getSelectedFile());
+            } catch (IOException ex) {
+                Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_downloadActionPerformed
+
+    public static void copyFile(File source, File destination) throws IOException
+    {
+        if (destination.exists())
+            destination.delete();
+        
+        FileChannel sourceChannel = null;
+        FileChannel destinationChannel = null;
+
+        try {
+            sourceChannel = new FileInputStream(source).getChannel();
+            destinationChannel = new FileOutputStream(destination).getChannel();
+            sourceChannel.transferTo(0, sourceChannel.size(),
+                    destinationChannel);
+        } finally {
+            if (sourceChannel != null && sourceChannel.isOpen())
+                sourceChannel.close();
+            if (destinationChannel != null && destinationChannel.isOpen())
+                destinationChannel.close();
+       }
+    }
+    
     public void addToJList(String newFolder)
     {
         DefaultListModel dlm = new DefaultListModel();
@@ -252,8 +309,8 @@ public class telaUsuario extends javax.swing.JFrame {
         }
         listaDir.setModel(dlm);
         String pwd = new File(Users.getPathAtual()).getAbsolutePath();
-        System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
-        if(pwd.equals("/home/renan/trabDrive/" + Users.getNome()))
+        //System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
+        if(pwd.equals(Users.path + Users.getNome()))
         {
             backDir.setEnabled(false);
         }
@@ -262,6 +319,8 @@ public class telaUsuario extends javax.swing.JFrame {
             backDir.setEnabled(true);
         }
     }
+    
+    
     
     /**
      * @param args the command line arguments
