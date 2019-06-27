@@ -16,8 +16,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
-import org.apache.commons.io.FilenameUtils;
 import usuarios.Users;
 
 /**
@@ -38,18 +36,8 @@ public class telaUsuario extends javax.swing.JFrame {
     
     public final void initJList()
     {
-        listaDir.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = new File(Users.getPathAtual()).list();
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        listaDir.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        if(Users.getPathAtual().equals(Users.path + Users.getNome() + "/"))
-        {
-            backDir.setEnabled(false);
-            enterDir.setEnabled(false);
-            download.setEnabled(false);
-        }
+        refreshJList();
+        verificaButton();
     }
     
 
@@ -233,10 +221,16 @@ public class telaUsuario extends javax.swing.JFrame {
 
     private void listaDirValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaDirValueChanged
         // TODO add your handling code here:
+        verificaButton();
+    }//GEN-LAST:event_listaDirValueChanged
+
+    public void verificaButton()
+    {
         File f = new File(Users.getPathAtual() + listaDir.getSelectedValue());
         if(listaDir.isSelectionEmpty())
         {
             enterDir.setEnabled(false);
+            download.setEnabled(false);
         }
         else if(f.isDirectory())
         {
@@ -248,8 +242,8 @@ public class telaUsuario extends javax.swing.JFrame {
             download.setEnabled(true);
             enterDir.setEnabled(false);
         }
-    }//GEN-LAST:event_listaDirValueChanged
-
+    }
+    
     private void downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadActionPerformed
         
         JFileChooser to = new JFileChooser();
@@ -318,6 +312,7 @@ public class telaUsuario extends javax.swing.JFrame {
         {
             backDir.setEnabled(true);
         }
+        verificaButton();
     }
     
     
