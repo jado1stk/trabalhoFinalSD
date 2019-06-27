@@ -15,7 +15,11 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.io.FilenameUtils;
 import usuarios.Users;
 
 /**
@@ -63,7 +67,7 @@ public class telaUsuario extends javax.swing.JFrame {
         jPopupMenu4 = new javax.swing.JPopupMenu();
         nomeUser = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listaDir = new javax.swing.JList<>();
+        listaDir = new javax.swing.JList<String>();
         enterDir = new javax.swing.JButton();
         backDir = new javax.swing.JButton();
         download = new javax.swing.JButton();
@@ -96,6 +100,11 @@ public class telaUsuario extends javax.swing.JFrame {
 
         nomeUser.setText("<html>Logado como:<b> " + Users.getNome() + "</b></html>");
 
+        listaDir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaDirMouseClicked(evt);
+            }
+        });
         listaDir.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 listaDirValueChanged(evt);
@@ -248,9 +257,10 @@ public class telaUsuario extends javax.swing.JFrame {
         
         JFileChooser to = new JFileChooser();
         to.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        //String extensao = FilenameUtils.getExtension(to.getSelectedFile().getAbsolutePath());
-        int result = to.showSaveDialog(null);
-        File from = new File(Users.getPathAtual() + listaDir.getSelectedValue());
+        to.addChoosableFileFilter(new FileNameExtensionFilter("text", "pdf", "jpg", "png", "gif", "bmp"));
+        int result = to.showSaveDialog(this);
+        System.out.println("Caminho: " + Users.getPathAtual() + "/" + listaDir.getSelectedValue());
+        File from = new File(Users.getPathAtual() + "/" + listaDir.getSelectedValue());/**/
         if (result == 0)
         {
             try {
@@ -260,6 +270,21 @@ public class telaUsuario extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_downloadActionPerformed
+
+    private void listaDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaDirMouseClicked
+        // TODO add your handling code here:
+        JList list = (JList)evt.getSource();
+        if(evt.getClickCount() >= 2){
+            //int index = list.locationToIndex(evt.getPoint());
+            //System.out.println("index: " + index);
+            try{
+                Users.setPathAtual(Users.getPathAtual() + listaDir.getSelectedValue() + "/");
+                refreshJList();
+            }catch(Exception ex){
+                System.out.println("Isto não é um diretório. " + ex);
+            }
+        }
+    }//GEN-LAST:event_listaDirMouseClicked
 
     public static void copyFile(File source, File destination) throws IOException
     {

@@ -7,7 +7,7 @@ package usuarios;
 public class Users {
     private static String nome;
     private static String pathAtual;
-    public static String path = "/home/renan/trabDrive/";
+    public static String path = "C://Users//levim//Documents//UTFBox//";
 
     public static String getPathAtual() {
         return pathAtual;
