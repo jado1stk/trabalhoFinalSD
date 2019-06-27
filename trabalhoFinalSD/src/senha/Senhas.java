@@ -16,7 +16,7 @@ public class Senhas {
     
     public boolean verificaUsers(String user, String password) throws Exception
     {
-        FileReader fileReader = new FileReader("/home/renan/trabDrive/users.txt");
+        FileReader fileReader = new FileReader(Users.path + "users.txt");
         
         try (BufferedReader bufferedReader = new BufferedReader(fileReader))
         {
