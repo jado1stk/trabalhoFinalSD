@@ -150,9 +150,9 @@ public class telaRegister extends javax.swing.JFrame {
                 con.newLine();
                 con.close();
                 Users.setPathAtual(Users.path + userName.getText() + "/");
+                Users.setNome(userName.getText());
                 new File(Users.getPathAtual()).mkdirs();
                 telaUsuario tu = new telaUsuario();
-                Users.setNome(userName.getText());
                 tu.setVisible(true);
                 this.dispose();
             }
