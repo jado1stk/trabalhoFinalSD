@@ -5,6 +5,7 @@
  */
 package trabalhofinalsd;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,9 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import org.apache.commons.io.FilenameUtils;
 import usuarios.Users;
 
 /**
@@ -299,14 +298,30 @@ public class telaUsuario extends javax.swing.JFrame {
     private void listaDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaDirMouseClicked
         // TODO add your handling code here:
         JList list = (JList)evt.getSource();
-        if(evt.getClickCount() >= 2){
-            //int index = list.locationToIndex(evt.getPoint());
-            //System.out.println("index: " + index);
-            try{
-                Users.setPathAtual(Users.getPathAtual() + listaDir.getSelectedValue() + "/");
+        if(evt.getClickCount() >= 2)
+        {
+            File file = new File(Users.getPathAtual() + listaDir.getSelectedValue());
+            if(file.isDirectory())
+            {
+                Users.setPathAtual(file.getAbsolutePath() + "/");
                 refreshJList();
-            }catch(Exception ex){
-                System.out.println("Isto não é um diretório. " + ex);
+            }
+            else if(file.isFile())
+            {
+                try {
+                    if(!Desktop.isDesktopSupported())
+                    {
+                        System.out.println("Desktop sem suporte");
+                    }
+                    else
+                    {
+                        Desktop desktop = Desktop.getDesktop();
+                        desktop.open(file);
+                    }
+                    
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
             }
         }
     }//GEN-LAST:event_listaDirMouseClicked
