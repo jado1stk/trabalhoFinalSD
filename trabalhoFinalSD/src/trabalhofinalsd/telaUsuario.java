@@ -134,6 +134,11 @@ public class telaUsuario extends javax.swing.JFrame {
         });
 
         upload.setText("Upload");
+        upload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadActionPerformed(evt);
+            }
+        });
 
         jMenu3.setText("Arquivos");
 
@@ -210,9 +215,10 @@ public class telaUsuario extends javax.swing.JFrame {
         if(newFolder != null)
         {
             Users.setPathAtual(Users.getPathAtual() + newFolder + "/");
-            addToJList(newFolder);
             new File(Users.getPathAtual()).mkdirs();
+            refreshJList();
         }
+        verificaButton();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void enterDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterDirActionPerformed
@@ -265,11 +271,30 @@ public class telaUsuario extends javax.swing.JFrame {
         {
             try {
                 copyFile(from, to.getSelectedFile());
+                JOptionPane.showMessageDialog(this, "O download do seu arquivo foi realizado com sucesso", "Download comcluido com êxito", 1);
             } catch (IOException ex) {
                 Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_downloadActionPerformed
+
+    private void uploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadActionPerformed
+        // TODO add your handling code here:
+        JFileChooser from = new  JFileChooser();
+        from.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result = from.showSaveDialog(null);
+        File to = new File(Users.getPathAtual() + from.getSelectedFile().getName());
+        if(result == 0)
+        {
+            try {
+                copyFile(from.getSelectedFile(), to);
+                JOptionPane.showMessageDialog(this, "O upload do seu arquivo foi realizado com sucesso", "Upload comcluido com êxito", 1);
+            } catch (IOException ex) {
+                Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        refreshJList();
+    }//GEN-LAST:event_uploadActionPerformed
 
     private void listaDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaDirMouseClicked
         // TODO add your handling code here:
@@ -305,17 +330,6 @@ public class telaUsuario extends javax.swing.JFrame {
             if (destinationChannel != null && destinationChannel.isOpen())
                 destinationChannel.close();
        }
-    }
-    
-    public void addToJList(String newFolder)
-    {
-        DefaultListModel dlm = new DefaultListModel();
-        for(int i = 0; i < listaDir.getModel().getSize(); i++)
-        {
-            dlm.addElement(listaDir.getModel().getElementAt(i));
-        }
-        dlm.addElement(newFolder);
-        listaDir.setModel(dlm);
     }
     
     public void refreshJList()
