@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trabalhofinalsd;
 
 import java.io.BufferedWriter;
@@ -47,11 +42,6 @@ public class telaRegister extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registre-se");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
 
         jLabel1.setText("Nome de usuário:");
 
@@ -121,7 +111,7 @@ public class telaRegister extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(confirmPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(21, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(register, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -134,6 +124,8 @@ public class telaRegister extends javax.swing.JFrame {
 
     private void registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerActionPerformed
 
+        // Por algum motivo essa merda me traz assim [valor1, valor2]
+        // Tirei a força isso
         String pass = Arrays.toString(password.getPassword());
         pass = pass.replace("[", "");
         pass = pass.replace("]", "");
@@ -143,12 +135,16 @@ public class telaRegister extends javax.swing.JFrame {
         try {
             if(userName.getText().length() > 2 && Arrays.equals(password.getPassword(), confirmPass.getPassword()) && !m.verificaUsers(userName.getText(), pass) && pass.length() > 7)
             {
+                // Lê o arquivo users.txt
                 FileWriter fw = new FileWriter(Users.path + "users.txt", true);
                 BufferedWriter con = new BufferedWriter(fw);
+                // Criptografa a Senha com um Hash MD5 padrão
                 String s = userName.getText() + " " + m.getMd5(pass);
                 con.write(s);
                 con.newLine();
                 con.close();
+                // Escreve tudo o que tinha pra escrever no users.txt
+                // Cria um diretório para o usuário e loga ele
                 Users.setPathAtual(Users.path + userName.getText() + "/");
                 Users.setNome(userName.getText());
                 new File(Users.getPathAtual()).mkdirs();
@@ -158,6 +154,7 @@ public class telaRegister extends javax.swing.JFrame {
             }
             else
             {
+                // Mensagenzinha de erro, caso ele digite algo errado
                 JOptionPane.showMessageDialog(null, "<html><b>Desculpe-nos, ocorreu um erro.</b><br>Algumas das coisas que podem ter ocorrido errado:"
                         + "<ul><li>Seu nome de usuário precisa ter no mínimo 3 caracteres;</li>"
                         + "<li>Seu nome de usuário já está em uso;</li>"
@@ -169,14 +166,8 @@ public class telaRegister extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_registerActionPerformed
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        //telaLogin tl = new telaLogin();
-        //tl.setVisible(true);
-    }//GEN-LAST:event_formWindowClosing
-
     private void returnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnLoginActionPerformed
-        // TODO add your handling code here:
+        // Apenas retorna a tela de login se o usuário quiser logar
         telaLogin tl = new telaLogin();
         tl.setVisible(true);
         this.dispose();

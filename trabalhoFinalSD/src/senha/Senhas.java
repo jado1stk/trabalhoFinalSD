@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
 import usuarios.Users;
 
 /**
@@ -13,7 +11,7 @@ import usuarios.Users;
  * @author renan
  */
 public class Senhas {
-    
+    //Cara, isso aqui só verifica se tem algum usuário compativel no arquivo txt
     public boolean verificaUsers(String user, String password) throws Exception
     {
         FileReader fileReader = new FileReader(Users.path + "users.txt");
@@ -22,7 +20,6 @@ public class Senhas {
         {
             String linha = null;
             password = getMd5(password);
-            List<Users> usuarios = new ArrayList<>();
             while ((linha = bufferedReader.readLine()) != null) 
             {
                 int tamanho = linha.length();
@@ -39,6 +36,7 @@ public class Senhas {
         return false;
     }
     
+    // Isso aqui faz um hash simples MD5
     public String getMd5(String s) throws Exception
     {
         MessageDigest m = MessageDigest.getInstance("MD5");

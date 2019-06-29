@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trabalhofinalsd;
 
-import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
 import senha.Senhas;
@@ -22,7 +16,6 @@ public class telaLogin extends javax.swing.JFrame {
      */
     public telaLogin() {
         initComponents();
-        Senhas p = new Senhas();
         setLocationRelativeTo(this);
     }
 
@@ -105,7 +98,8 @@ public class telaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarActionPerformed
-        // TODO add your handling code here:
+        // Por algum motivo essa merda me traz assim [valor1, valor2]
+        // Tirei a força isso
         Senhas senha = new Senhas();
         String pass = Arrays.toString(txtSenha.getPassword());
         pass = pass.replace("[", "");
@@ -114,12 +108,17 @@ public class telaLogin extends javax.swing.JFrame {
         pass = pass.replace(" ", "");
         try
         {
+            // Verifica se é o Server
+            // Ainda falta dar um nome e senha decente pra isso aqui
+            // E provavelmente não deve estar funcionando mesmo
             if(txtLogin.getText().equals("admin") && pass.equals("admin")){
                 telaServidor ts = new telaServidor();
                 ts.setVisible(true);
             }
+            // Se ele conseguir encontrar um usuário e senha compativeis...
             else if(senha.verificaUsers(txtLogin.getText(), pass))
             {
+                // Faz o login
                 Users.setNome(txtLogin.getText());
                 Users.setPathAtual(Users.path + Users.getNome() + "/");
                 telaUsuario tu = new telaUsuario();
@@ -128,6 +127,7 @@ public class telaLogin extends javax.swing.JFrame {
             }
             else
             {
+                // Mensagenzinha se ocorrer cagada
                 JOptionPane.showMessageDialog(null, "<html><b>Desculpe-nos, ocorreu um erro.</b><br>Algumas das coisas que podem ter ocorrido errado:"
                         + "<ul><li>Você pode ter digitado seu usuário errado (tome cuidado com letras maiúsculas);</li>"
                         + "<li>Você pode ter digitado sua senha errada.</li></ul></html>", "Algo deu errado", 0);
@@ -139,6 +139,7 @@ public class telaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btEntrarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Manda pra tela de registro de usuário
         telaRegister tr = new telaRegister();
         tr.setVisible(true);
         this.setVisible(false);

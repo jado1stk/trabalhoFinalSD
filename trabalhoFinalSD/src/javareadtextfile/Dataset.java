@@ -9,6 +9,9 @@ import java.util.Set;
  *
  * @author Sobjak
  */
+
+// Como dito acima, foi o prof Sobjak que fez inicialmente, e me imprestou
+// Devidos créditos a ele, e se tiver alguma duvida, não me procure
 public class Dataset extends HashMap<String, ArrayList> {
     
     public String[] getColumnNamesArray() {

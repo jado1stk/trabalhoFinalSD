@@ -13,6 +13,10 @@ public class DatasetFileReader {
 
     public static Dataset fromFile(Path path) {
         
+        // Cara, esse demônio aqui, prefiro nem entender como fiz
+        // Uma parte o Jefferson tava junto pra o trabalho de IA2
+        // Qualquer coisa manda msg pra ele que tenho preguiça de explicar
+        // O e-mail dele é ... Não tenho ideia
         Dataset dataset = new Dataset();
         try (BufferedReader reader = Files.newBufferedReader(path);) {
             Iterator<String> it = reader.lines().iterator();
@@ -28,6 +32,9 @@ public class DatasetFileReader {
                 dataset.getData().put(col, new ArrayList());
             }
 
+            // Na real, tem umas partes que realmente não acho que precisariam
+            // Mas é a velha regra ...
+            // "Funcionou! Não meche!"
             while (it.hasNext()) {
                 String[] cols = it.next().split("\\s+");
 
