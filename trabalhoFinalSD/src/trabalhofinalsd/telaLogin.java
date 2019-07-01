@@ -121,6 +121,7 @@ public class telaLogin extends javax.swing.JFrame {
                 // Faz o login
                 Users.setNome(txtLogin.getText());
                 Users.setPathAtual(Users.path + Users.getNome() + "/");
+                // Classe Cliente
                 telaUsuario tu = new telaUsuario();
                 tu.setVisible(true);
                 dispose();
