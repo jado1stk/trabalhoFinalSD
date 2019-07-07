@@ -156,7 +156,7 @@ public class telaUsuario extends javax.swing.JFrame {
                     .addComponent(upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nomeUser)
-                        .addGap(0, 10, Short.MAX_VALUE))
+                        .addGap(0, 16, Short.MAX_VALUE))
                     .addComponent(enterDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(newDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -238,10 +238,8 @@ public class telaUsuario extends javax.swing.JFrame {
             enterDir.setEnabled(false);
             download.setEnabled(false);
         } else {
-            ClientSide.dos.writeUTF("isdir");
-            ClientSide.dos.writeUTF(Users.getPwd() + listaDir.getSelectedValue());
-            String isDir = ClientSide.dis.readUTF();
-            if (isDir.toLowerCase().equals("true")) {
+
+            if (isDir()) {
                 enterDir.setEnabled(true);
                 download.setEnabled(false);
             } else {
@@ -259,7 +257,22 @@ public class telaUsuario extends javax.swing.JFrame {
         }
     }
 
+    public Boolean isDir() throws IOException {
+        ClientSide.dos.writeUTF("isdir");
+        ClientSide.dos.writeUTF(Users.getPwd() + listaDir.getSelectedValue());
+        String isDir = ClientSide.dis.readUTF();
+        return isDir.toLowerCase().equals("true");
+    }
+
     private void downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadActionPerformed
+        try {
+            download();
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+    }//GEN-LAST:event_downloadActionPerformed
+
+    public void download() throws IOException {
         try {
             // Chama FileChooser e espera o usuário informar o diretório e nome do arquivo
             JFileChooser to = new JFileChooser();
@@ -275,27 +288,24 @@ public class telaUsuario extends javax.swing.JFrame {
             int result = to.showSaveDialog(this);
             //System.out.println("Caminho: " + Users.getPathAtual() + "/" + listaDir.getSelectedValue());
             String from;
-            if(Users.getPwd().endsWith("/"))
-            {
+            if (Users.getPwd().endsWith("/")) {
                 from = Users.getPwd() + listaDir.getSelectedValue();
-            }
-            else
-            {
+            } else {
                 from = Users.getPwd() + "/" + listaDir.getSelectedValue();
             }
             System.out.println(from);
             // Se o usuário selecionou tudo certinho, copia o arquivo para onde ele selecionou
             if (result == 0) {
-                System.out.println(to.getSelectedFile().toString()+ "." + extension);
+                System.out.println(to.getSelectedFile().toString() + "." + extension);
                 ClientSide.dos.writeUTF("get");
                 ClientSide.dos.writeUTF(from);
                 ClientSide.get(ClientSide.dis, ClientSide.soc, to.getSelectedFile().toPath().toString() + "." + extension);
                 ClientSide.dos.flush();
             }
         } catch (Exception ex) {
-            System.out.println(ex);;
+            System.out.println(ex);
         }
-    }//GEN-LAST:event_downloadActionPerformed
+    }
 
     private void uploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadActionPerformed
         // Usuário pode selecionar o arquivo
@@ -310,8 +320,8 @@ public class telaUsuario extends javax.swing.JFrame {
                 ClientSide.dos.writeUTF(to.toString());//arquivo.txt
                 System.out.println("from: " + from.getSelectedFile().toPath().toString());
                 System.out.println("to: " + to.toString());
-                ClientSide.put(ClientSide.dis, ClientSide.soc, from.toString());
-            }catch (Exception ex) {
+                ClientSide.put(ClientSide.dis, ClientSide.soc, from.getSelectedFile().toPath().toString());
+            } catch (Exception ex) {
                 Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -325,31 +335,19 @@ public class telaUsuario extends javax.swing.JFrame {
     private void listaDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaDirMouseClicked
         // Se dar dois cliques com o mouse
         if (evt.getClickCount() >= 2) {
-            File file = new File(Users.getPwd() + listaDir.getSelectedValue());
             // Se é um diretório
-            if (file.isDirectory()) {
-                // Entra nele e mostra na lista os filhos
-                Users.setPwd(file.getAbsolutePath() + "/");
-                try {
-                    refreshJList();
-                } catch (IOException ex) {
-                    Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else if (file.isFile()) {
-                // Se é um arquivo, busca no SO o suporte para abrir o determinado arquivo
-                // E o abre com o padrão
-                try {
-                    if (!Desktop.isDesktopSupported()) {
-                        System.out.println("Desktop sem suporte");
-                    } else {
-                        Desktop desktop = Desktop.getDesktop();
-                        desktop.open(file);
-                    }
+            try {
+                if (isDir()) {
+                    Users.setPwd(Users.getPwd() + listaDir.getSelectedValue() + "/");
 
-                } catch (IOException e) {
-                    System.out.println(e);
+                    refreshJList();
+                } else {
+                    download();
                 }
+            } catch (IOException e) {
+                System.out.println(e);
             }
+
         }
     }//GEN-LAST:event_listaDirMouseClicked
 

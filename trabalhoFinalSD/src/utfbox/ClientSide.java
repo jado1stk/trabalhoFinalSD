@@ -9,12 +9,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
-import trabalhofinalsd.telaLogin;
-import trabalhofinalsd.telaRegister;
-import trabalhofinalsd.telaServidor;
-import trabalhofinalsd.telaUsuario;
 
 public class ClientSide {
 
@@ -23,7 +18,7 @@ public class ClientSide {
     
     //creating object of socket class which requires IP address of Server and port number 
     //String IpAdd = "192.168.0.181";
-    public static String IpAdd = "192.168.0.181";
+    public static String IpAdd = "192.168.1.21";
     public static int portNum = 9999;
     public static int tport = 9998;
     public static Socket soc;

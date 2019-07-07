@@ -7,7 +7,7 @@ package usuarios;
 public class Users {
     private static String nome;
     private static String pwd;
-    public static String path = "C:/Users/levim/Downloads/trabDrive/";
+    public static String path = "C:/users/levim/Downloads/trabDrive/";
     // Minha do Windows = C:/Users/renan/OneDrive/Documentos/trabDrive/
     // Minha do Linux = /home/renan/trabDrive/
     // Altere essa variável para o seu path padrão
