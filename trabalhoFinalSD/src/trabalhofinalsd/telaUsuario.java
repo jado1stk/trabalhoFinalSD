@@ -308,7 +308,7 @@ public class telaUsuario extends javax.swing.JFrame {
             try {
                 ClientSide.dos.writeUTF("put");
                 ClientSide.dos.writeUTF(to.toString());//arquivo.txt
-                System.out.println("from: " + from.toString());
+                System.out.println("from: " + from.getSelectedFile().toPath().toString());
                 System.out.println("to: " + to.toString());
                 ClientSide.put(ClientSide.dis, ClientSide.soc, from.toString());
             }catch (Exception ex) {
