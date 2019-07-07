@@ -77,7 +77,7 @@ public class Senhas {
             String linha = null;
             String valor = "";
             while ((linha = bufferedReader.readLine()) != null) {
-                valor = linha + "\n";
+                valor += linha + "\n";
             }
             return valor;
         } catch (Exception e) {

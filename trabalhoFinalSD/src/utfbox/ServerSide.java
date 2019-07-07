@@ -133,7 +133,6 @@ public class ServerSide {
                             String deletePath = dis.readUTF();
                             delete(deletePath);
                             break;
-
                         case "put":
                             String name = dis.readUTF();
                             put(dis, clientSoc, name);
@@ -190,7 +189,10 @@ public class ServerSide {
                         case "arquivoscompartilhados":
                             String quem = dis.readUTF();
                             String arquivos = Senhas.getCompartilhados(quem);
-                            ClientSide.dos.writeUTF(arquivos);
+                            if(arquivos.equals("")){
+                                arquivos = "false";
+                            }
+                            dos.writeUTF(arquivos);
                             break;
                     }
                 }
@@ -397,12 +399,21 @@ public class ServerSide {
             System.out.println("created directory: " + newDir);
         }
 
-        void delete(String deletePath) throws Exception {
-            File file = new File(pwd() + File.separator + deletePath);
+        boolean delete(String deletePath) throws Exception {
+            File file = new File(deletePath);
             if (file.exists()) {
+                if(file.isDirectory())
+                {
+                    String[]entries = file.list();
+                    for(String s: entries){
+                        File currentFile = new File(file.getPath(),s);
+                        currentFile.delete();
+                    }
+                }
                 file.delete();
+                return true;
             } else {
-                System.out.println("file doesn't exist");
+                return false;
             }
         }
 
