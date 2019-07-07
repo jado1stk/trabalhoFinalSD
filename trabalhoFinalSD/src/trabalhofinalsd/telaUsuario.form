@@ -98,21 +98,24 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" min="-2" pref="453" max="-2" attributes="0"/>
-                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jScrollPane1" min="-2" pref="453" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnShared" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="backDir" max="32767" attributes="0"/>
-                  <Component id="download" max="32767" attributes="0"/>
                   <Component id="upload" max="32767" attributes="0"/>
+                  <Component id="newDirectory" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="nomeUser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="enterDir" max="32767" attributes="0"/>
-                  <Component id="newDirectory" max="32767" attributes="0"/>
+                  <Component id="btnShare" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -125,20 +128,19 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="nomeUser" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnShared" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jScrollPane1" min="-2" pref="341" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="newDirectory" min="-2" pref="44" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="enterDir" min="-2" pref="44" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="backDir" min="-2" pref="44" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="newDirectory" min="-2" pref="44" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btnShare" min="-2" pref="44" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="upload" min="-2" pref="44" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="download" min="-2" pref="44" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -177,28 +179,12 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="enterDir">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Entrar na Pasta"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enterDirActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JButton" name="backDir">
       <Properties>
         <Property name="text" type="java.lang.String" value="Voltar"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backDirActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="download">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Download"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downloadActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="upload">
@@ -222,6 +208,19 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newDirectoryActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JToggleButton" name="btnShared">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Compartilhado"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnShare">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Compartilhar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnShareActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

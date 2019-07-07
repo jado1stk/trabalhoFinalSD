@@ -182,6 +182,11 @@ public class ServerSide {
                             System.out.println("Server Connection closed");
                             quit = true;
                             break;
+                        case "compartilhar":
+                            String comquem = dis.readUTF();
+                            String oq = dis.readUTF();
+                            Senhas.compartilhar(comquem, oq);
+                            break;
                     }
                 }
             } catch (Exception e) {

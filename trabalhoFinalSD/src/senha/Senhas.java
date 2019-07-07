@@ -55,7 +55,20 @@ public class Senhas {
         // Escreve tudo o que tinha pra escrever no users.txt
         // Cria um diretório para o usuário e loga ele
         new File(Users.path + userName + "/").mkdirs();
+        File shared = new File(Users.path + userName + ".txt");
+        if(!shared.createNewFile())
+            System.out.println("Não foi possível criar o arquivo");
         return (Users.path + userName + "/");
     }
-
+    
+    public static boolean compartilhar (String comquem, String arq) throws IOException{
+        FileWriter fw = new FileWriter(Users.path + comquem + ".txt", true);
+        BufferedWriter con = new BufferedWriter(fw);
+        // Criptografa a Senha com um Hash MD5 padrão
+        String arquivo = arq;
+        con.write(arquivo);
+        con.newLine();
+        con.close();
+        return true;
+    }
 }

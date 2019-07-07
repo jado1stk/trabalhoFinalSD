@@ -61,13 +61,13 @@ public class telaUsuario extends javax.swing.JFrame {
         jPopupMenu4 = new javax.swing.JPopupMenu();
         nomeUser = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listaDir = new javax.swing.JList<>();
-        enterDir = new javax.swing.JButton();
+        listaDir = new javax.swing.JList<String>();
         backDir = new javax.swing.JButton();
-        download = new javax.swing.JButton();
         upload = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         newDirectory = new javax.swing.JButton();
+        btnShared = new javax.swing.JToggleButton();
+        btnShare = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
@@ -103,24 +103,10 @@ public class telaUsuario extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(listaDir);
 
-        enterDir.setText("Entrar na Pasta");
-        enterDir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enterDirActionPerformed(evt);
-            }
-        });
-
         backDir.setText("Voltar");
         backDir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backDirActionPerformed(evt);
-            }
-        });
-
-        download.setText("Download");
-        download.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downloadActionPerformed(evt);
             }
         });
 
@@ -140,25 +126,36 @@ public class telaUsuario extends javax.swing.JFrame {
             }
         });
 
+        btnShared.setText("Compartilhado");
+
+        btnShare.setText("Compartilhar");
+        btnShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShareActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnShared)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(backDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nomeUser)
                         .addGap(0, 16, Short.MAX_VALUE))
-                    .addComponent(enterDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(newDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnShare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -167,20 +164,19 @@ public class telaUsuario extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nomeUser)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(btnShared))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(newDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(enterDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(backDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(newDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnShare, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(download, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -199,17 +195,6 @@ public class telaUsuario extends javax.swing.JFrame {
             Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowClosing
-
-    private void enterDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterDirActionPerformed
-        // Se clicar para entrar no diretório, muda o diretório atual e
-        // atualiza a lista
-        Users.setPwd(Users.getPwd() + listaDir.getSelectedValue() + "/");
-        try {
-            refreshJList();
-        } catch (IOException ex) {
-            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_enterDirActionPerformed
 
     private void backDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backDirActionPerformed
         // Pega o ultimo diretório e apaga ele do pathAtual
@@ -234,19 +219,10 @@ public class telaUsuario extends javax.swing.JFrame {
 
     public void verificaButton() throws IOException {
         // Verifica quais botões podem ser usados no contexo atual
-        if (listaDir.isSelectionEmpty()) {
-            enterDir.setEnabled(false);
-            download.setEnabled(false);
-        } else {
-
-            if (isDir()) {
-                enterDir.setEnabled(true);
-                download.setEnabled(false);
-            } else {
-                download.setEnabled(true);
-                enterDir.setEnabled(false);
-            }
-        }
+        if(isDir())
+            btnShare.setEnabled(false);
+        else
+            btnShare.setEnabled(true);
         String pwd = Users.getPwd();
         pwd = pwd.replaceAll(Users.path, "");
         //System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
@@ -263,14 +239,6 @@ public class telaUsuario extends javax.swing.JFrame {
         String isDir = ClientSide.dis.readUTF();
         return isDir.toLowerCase().equals("true");
     }
-
-    private void downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadActionPerformed
-        try {
-            download();
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
-    }//GEN-LAST:event_downloadActionPerformed
 
     public void download() throws IOException {
         try {
@@ -369,6 +337,27 @@ public class telaUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_newDirectoryActionPerformed
 
+    public String getfile(){
+        return Users.getPwd() + listaDir.getSelectedValue();
+    }
+    
+    private void btnShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShareActionPerformed
+        try {
+            String usuario = JOptionPane.showInputDialog("Nome do usuário com quem vai compartilhar");
+            if(usuario == null || usuario.equals("")){
+                JOptionPane.showMessageDialog(this, "Digite o nome do usuário");
+            }else{
+                ClientSide.dos.writeUTF("compartilhar");//funcao
+                ClientSide.dos.writeUTF(usuario);//com quem
+                ClientSide.dos.writeUTF(getfile());//o que
+                System.out.println("Arquivo compartilhado");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+    }//GEN-LAST:event_btnShareActionPerformed
+
     public static void copyFile(File source, File destination) throws IOException {
         // Se existe o destino, limpe o caminho para não ocorrer qualquer conflito
         if (destination.exists()) {
@@ -455,8 +444,8 @@ public class telaUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backDir;
-    private javax.swing.JButton download;
-    private javax.swing.JButton enterDir;
+    private javax.swing.JButton btnShare;
+    private javax.swing.JToggleButton btnShared;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
