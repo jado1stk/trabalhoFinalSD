@@ -306,9 +306,12 @@ public class telaUsuario extends javax.swing.JFrame {
         // Se ele selecionou certo, copia o arquivo para o server
         if (result == 0) {
             try {
-                copyFile(from.getSelectedFile(), to);
-                JOptionPane.showMessageDialog(this, "O upload do seu arquivo foi realizado com sucesso", "Upload concluido com êxito", 1);
-            } catch (IOException ex) {
+                ClientSide.dos.writeUTF("put");
+                ClientSide.dos.writeUTF(to.toString());//arquivo.txt
+                System.out.println("from: " + from.toString());
+                System.out.println("to: " + to.toString());
+                ClientSide.put(ClientSide.dis, ClientSide.soc, from.toString());
+            }catch (Exception ex) {
                 Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

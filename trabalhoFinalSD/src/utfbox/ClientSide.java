@@ -133,7 +133,7 @@ public class ClientSide {
     }
 
     //put command
-    static void put(DataInputStream dis, Socket soc, String path) throws Exception {
+    public static void put(DataInputStream dis, Socket soc, String path) throws Exception {
         //Read from text file 
         System.out.println("C: Writing File");
         boolean terminated = false;

@@ -147,10 +147,11 @@ public class ServerSide {
 
                         case "ls":
                             String dir = dis.readUTF();
+                            System.out.println("" + dir);
                             String lsout = ls(dir);
                             dos.writeUTF(lsout);
                             break;
-                        case "isDir":
+                        case "isdir":
                             String diretorio = dis.readUTF();
                             File f = new File(diretorio);
                             String isDir = Boolean.toString(f.isDirectory());
@@ -268,7 +269,7 @@ public class ServerSide {
 
         //put command
         void put(DataInputStream dis, Socket clientSoc, String name) throws Exception {
-            File putFile = new File(pwd() + File.separator + name);
+            File putFile = new File(name);
             boolean terminated = false;
             int commandID = counter++;
             dos.writeInt(commandID);
