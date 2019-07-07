@@ -187,6 +187,11 @@ public class ServerSide {
                             String oq = dis.readUTF();
                             Senhas.compartilhar(comquem, oq);
                             break;
+                        case "arquivoscompartilhados":
+                            String quem = dis.readUTF();
+                            String arquivos = Senhas.getCompartilhados(quem);
+                            ClientSide.dos.writeUTF(arquivos);
+                            break;
                     }
                 }
             } catch (Exception e) {

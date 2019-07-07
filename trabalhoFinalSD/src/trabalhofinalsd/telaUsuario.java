@@ -1,9 +1,13 @@
 package trabalhofinalsd;
 
 import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.logging.Level;
@@ -127,6 +131,11 @@ public class telaUsuario extends javax.swing.JFrame {
         });
 
         btnShared.setText("Compartilhado");
+        btnShared.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSharedActionPerformed(evt);
+            }
+        });
 
         btnShare.setText("Compartilhar");
         btnShare.addActionListener(new java.awt.event.ActionListener() {
@@ -357,6 +366,36 @@ public class telaUsuario extends javax.swing.JFrame {
         }
          
     }//GEN-LAST:event_btnShareActionPerformed
+
+    
+    private void btnSharedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSharedActionPerformed
+        try{
+            if (Users.compatilhado) {
+                //pedir pro servidor a lista dos arquivos compartilhados
+                ClientSide.dos.writeUTF("arquivoscompartilhados");
+                ClientSide.dos.writeUTF(Users.getNome());
+                String listaarquivos = ClientSide.dis.readUTF();
+                String strings[] = listaarquivos.split("\n");
+                DefaultListModel dlm = new DefaultListModel();
+                // Adiciona todos eles ao modelo da lista
+                for (String string : strings) {
+                    dlm.addElement(string);
+                }
+                // Set a JList com aquele modelo
+                listaDir.setModel(dlm);
+                verificaButton();
+                // Altera a label que diz o diretório atual do usuário
+                Users.setPwd(Users.getPwd().replace("\\", "/"));
+                jLabel1.setText("Área compartilhada");
+            } else {
+                //Não compartilhado
+                refreshJList();
+            }
+        }catch(IOException ex){
+            System.out.println("" + ex);
+        }
+        
+    }//GEN-LAST:event_btnSharedActionPerformed
 
     public static void copyFile(File source, File destination) throws IOException {
         // Se existe o destino, limpe o caminho para não ocorrer qualquer conflito

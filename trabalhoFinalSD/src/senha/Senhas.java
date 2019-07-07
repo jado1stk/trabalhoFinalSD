@@ -64,11 +64,25 @@ public class Senhas {
     public static boolean compartilhar (String comquem, String arq) throws IOException{
         FileWriter fw = new FileWriter(Users.path + comquem + ".txt", true);
         BufferedWriter con = new BufferedWriter(fw);
-        // Criptografa a Senha com um Hash MD5 padrão
         String arquivo = arq;
         con.write(arquivo);
         con.newLine();
         con.close();
         return true;
+    }
+    
+    public static String getCompartilhados(String quem) throws IOException{
+        FileReader fileReader = new FileReader(Users.path + quem + ".txt");
+        try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            String linha = null;
+            String valor = "";
+            while ((linha = bufferedReader.readLine()) != null) {
+                valor = linha + "\n";
+            }
+            return valor;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return "";
     }
 }
