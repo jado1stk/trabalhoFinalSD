@@ -5,6 +5,9 @@
  */
 package trabalhofinalsd;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author utfpr
@@ -61,8 +64,13 @@ public class telaServidor extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        telaLogin tl = new telaLogin();
-        tl.setVisible(true);
+        telaLogin tl;
+        try {
+            tl = new telaLogin();
+            tl.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(telaServidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     /**

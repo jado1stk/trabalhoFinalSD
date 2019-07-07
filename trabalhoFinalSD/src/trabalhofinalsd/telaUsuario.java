@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
 import usuarios.Users;
+import utfbox.ClientSide;
 
 /**
  *
@@ -30,10 +31,14 @@ public class telaUsuario extends javax.swing.JFrame {
         initComponents();
         //Coloca a janela no centro da tela
         setLocationRelativeTo(this);
-        refreshJList();
-        //System.out.println(Arrays.toString(new File(Users.getPathAtual()).list()));
+        try {
+            refreshJList();
+            //System.out.println(Arrays.toString(new File(Users.getPathAtual()).list()));
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,11 +67,7 @@ public class telaUsuario extends javax.swing.JFrame {
         download = new javax.swing.JButton();
         upload = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
+        newDirectory = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
@@ -130,27 +131,14 @@ public class telaUsuario extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText(Users.getPathAtual().replace(Users.path, ""));
+        jLabel1.setText(Users.getPwd().replace(Users.path, ""));
 
-        jMenu3.setText("Arquivos");
-
-        jMenuItem1.setText("Novo Diretório");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        newDirectory.setText("Novo Diretório");
+        newDirectory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                newDirectoryActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem1);
-
-        jMenuBar1.add(jMenu3);
-
-        jMenu4.setText("Editar");
-        jMenuBar1.add(jMenu4);
-
-        jMenu5.setText("Tipo de Consulta");
-        jMenuBar1.add(jMenu5);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,13 +151,14 @@ public class telaUsuario extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(backDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nomeUser)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(backDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(enterDir, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                    .addComponent(download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 10, Short.MAX_VALUE))
+                    .addComponent(enterDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -183,6 +172,8 @@ public class telaUsuario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(newDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(enterDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(backDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -190,7 +181,7 @@ public class telaUsuario extends javax.swing.JFrame {
                         .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(download, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -200,148 +191,158 @@ public class telaUsuario extends javax.swing.JFrame {
         // Quando fechar a janela
         // Ao invés de fechar a aplicação,
         // O usuário é levado a tela de login.
-        telaLogin tl = new telaLogin();
-        tl.setVisible(true);
-    }//GEN-LAST:event_formWindowClosing
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // Ícone do menu de criação do novo diretório
-        ImageIcon iconNewDirectory = new ImageIcon(Users.path + "icons/newFolder.png");
-        String newFolder = JOptionPane.showInputDialog(this, "Escolha o nome para o novo diretório", "Novo diretório", 1, iconNewDirectory, null, "").toString();
-        // Pega o valor que o usuário digitou
-        if(newFolder != null)
-        {
-            // Cria novo diretório, e atualiza a lista
-            Users.setPathAtual(Users.getPathAtual() + newFolder + "/");
-            new File(Users.getPathAtual()).mkdirs();
-            refreshJList();
+        telaLogin tl;
+        try {
+            tl = new telaLogin();
+            tl.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_formWindowClosing
 
     private void enterDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterDirActionPerformed
         // Se clicar para entrar no diretório, muda o diretório atual e
         // atualiza a lista
-        Users.setPathAtual(Users.getPathAtual() + listaDir.getSelectedValue() + "/");
-        refreshJList();
+        Users.setPwd(Users.getPwd() + listaDir.getSelectedValue() + "/");
+        try {
+            refreshJList();
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_enterDirActionPerformed
 
     private void backDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backDirActionPerformed
         // Pega o ultimo diretório e apaga ele do pathAtual
-        String pwd = new File(Users.getPathAtual()).getName() + "/";
-        Users.setPathAtual(Users.getPathAtual().replace(pwd, ""));
-        refreshJList();
+        String pwd = new File(Users.getPwd()).getName() + "/";
+        Users.setPwd(Users.getPwd().replace(pwd, ""));
+        try {
+            refreshJList();
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_backDirActionPerformed
 
     private void listaDirValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaDirValueChanged
-        // Quando é realizada alguma alteração no valor da lista
-        // Atualiza quais botões podem ser clicados
-        verificaButton();
+        try {
+            // Quando é realizada alguma alteração no valor da lista
+            // Atualiza quais botões podem ser clicados
+            verificaButton();
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_listaDirValueChanged
 
-    public void verificaButton()
-    {
+    public void verificaButton() throws IOException {
         // Verifica quais botões podem ser usados no contexo atual
-        File f = new File(Users.getPathAtual() + listaDir.getSelectedValue());
-        if(listaDir.isSelectionEmpty())
-        {
+        if (listaDir.isSelectionEmpty()) {
             enterDir.setEnabled(false);
             download.setEnabled(false);
+        } else {
+            ClientSide.dos.writeUTF("isdir");
+            ClientSide.dos.writeUTF(Users.getPwd() + listaDir.getSelectedValue());
+            String isDir = ClientSide.dis.readUTF();
+            if (isDir.toLowerCase().equals("true")) {
+                enterDir.setEnabled(true);
+                download.setEnabled(false);
+            } else {
+                download.setEnabled(true);
+                enterDir.setEnabled(false);
+            }
         }
-        else if(f.isDirectory())
-        {
-            enterDir.setEnabled(true);
-            download.setEnabled(false);
-        }
-        else
-        {
-            download.setEnabled(true);
-            enterDir.setEnabled(false);
-        }
-        String pwd = new File(Users.getPathAtual()).getAbsolutePath();
+        String pwd = Users.getPwd();
+        pwd = pwd.replaceAll(Users.path, "");
         //System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
-        if(pwd.equals(Users.path + Users.getNome()))
-        {
+        if (pwd.equals(Users.getNome() + "/")) {
             backDir.setEnabled(false);
-        }
-        else
-        {
+        } else {
             backDir.setEnabled(true);
         }
     }
-    
+
     private void downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadActionPerformed
-        // Chama FileChooser e espera o usuário informar o diretório e nome do arquivo
-        JFileChooser to = new JFileChooser();
-        // Pega a extensão do arquivo
-        String extension = FilenameUtils.getExtension(Users.getPathAtual() + listaDir.getSelectedValue());
-        FileFilter ff = new FileNameExtensionFilter("Arquivo " + extension.toUpperCase(), extension);
-        // Proibe o usuário de selecionar um diretório
-        to.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        // Set nome inicial do arquivo automaticamente
-        to.setSelectedFile(new File(listaDir.getSelectedValue().replace("." + extension, "")));
-        // Seta como default o tipo do arquivo que o usuário selecionou
-        to.setFileFilter(ff);
-        int result = to.showSaveDialog(this);
-        //System.out.println("Caminho: " + Users.getPathAtual() + "/" + listaDir.getSelectedValue());
-        File from = new File(Users.getPathAtual() + "/" + listaDir.getSelectedValue());
-        // Se o usuário selecionou tudo certinho, copia o arquivo para onde ele selecionou
-        if (result == 0)
-        {
-            try {
-                copyFile(from, to.getSelectedFile());
-                JOptionPane.showMessageDialog(this, "O download do seu arquivo foi realizado com sucesso", "Download comcluido com êxito", 1);
-            } catch (IOException ex) {
-                Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        try {
+            // Chama FileChooser e espera o usuário informar o diretório e nome do arquivo
+            JFileChooser to = new JFileChooser();
+            // Pega a extensão do arquivo
+            String extension = FilenameUtils.getExtension(Users.getPwd() + listaDir.getSelectedValue());
+            FileFilter ff = new FileNameExtensionFilter("Arquivo " + extension.toUpperCase(), extension);
+            // Proibe o usuário de selecionar um diretório
+            to.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            // Set nome inicial do arquivo automaticamente
+            to.setSelectedFile(new File(listaDir.getSelectedValue().replace("." + extension, "")));
+            // Seta como default o tipo do arquivo que o usuário selecionou
+            to.setFileFilter(ff);
+            int result = to.showSaveDialog(this);
+            //System.out.println("Caminho: " + Users.getPathAtual() + "/" + listaDir.getSelectedValue());
+            String from;
+            if(Users.getPwd().endsWith("/"))
+            {
+                from = Users.getPwd() + listaDir.getSelectedValue();
             }
+            else
+            {
+                from = Users.getPwd() + "/" + listaDir.getSelectedValue();
+            }
+            System.out.println(from);
+            // Se o usuário selecionou tudo certinho, copia o arquivo para onde ele selecionou
+            if (result == 0) {
+                System.out.println(to.getSelectedFile().toString()+ "." + extension);
+                ClientSide.dos.writeUTF("get");
+                ClientSide.dos.writeUTF(from);
+                ClientSide.get(ClientSide.dis, ClientSide.soc, to.getSelectedFile().toPath().toString() + "." + extension);
+                ClientSide.dos.flush();
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);;
         }
     }//GEN-LAST:event_downloadActionPerformed
 
     private void uploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadActionPerformed
         // Usuário pode selecionar o arquivo
-        JFileChooser from = new  JFileChooser();
+        JFileChooser from = new JFileChooser();
         from.setFileSelectionMode(JFileChooser.FILES_ONLY);
         int result = from.showSaveDialog(null);
-        File to = new File(Users.getPathAtual() + from.getSelectedFile().getName());
+        File to = new File(Users.getPwd() + from.getSelectedFile().getName());
         // Se ele selecionou certo, copia o arquivo para o server
-        if(result == 0)
-        {
+        if (result == 0) {
             try {
                 copyFile(from.getSelectedFile(), to);
-                JOptionPane.showMessageDialog(this, "O upload do seu arquivo foi realizado com sucesso", "Upload comcluido com êxito", 1);
+                JOptionPane.showMessageDialog(this, "O upload do seu arquivo foi realizado com sucesso", "Upload concluido com êxito", 1);
             } catch (IOException ex) {
                 Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        refreshJList();
+        try {
+            refreshJList();
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_uploadActionPerformed
 
     private void listaDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaDirMouseClicked
         // Se dar dois cliques com o mouse
-        if(evt.getClickCount() >= 2)
-        {
-            File file = new File(Users.getPathAtual() + listaDir.getSelectedValue());
+        if (evt.getClickCount() >= 2) {
+            File file = new File(Users.getPwd() + listaDir.getSelectedValue());
             // Se é um diretório
-            if(file.isDirectory())
-            {
+            if (file.isDirectory()) {
                 // Entra nele e mostra na lista os filhos
-                Users.setPathAtual(file.getAbsolutePath() + "/");
-                refreshJList();
-            }
-            else if(file.isFile())
-            {
+                Users.setPwd(file.getAbsolutePath() + "/");
+                try {
+                    refreshJList();
+                } catch (IOException ex) {
+                    Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (file.isFile()) {
                 // Se é um arquivo, busca no SO o suporte para abrir o determinado arquivo
                 // E o abre com o padrão
                 try {
-                    if(!Desktop.isDesktopSupported())
-                    {
+                    if (!Desktop.isDesktopSupported()) {
                         System.out.println("Desktop sem suporte");
-                    }
-                    else
-                    {
+                    } else {
                         Desktop desktop = Desktop.getDesktop();
                         desktop.open(file);
                     }
-                    
+
                 } catch (IOException e) {
                     System.out.println(e);
                 }
@@ -349,12 +350,30 @@ public class telaUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_listaDirMouseClicked
 
-    public static void copyFile(File source, File destination) throws IOException
-    {
+    private void newDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newDirectoryActionPerformed
+        try {
+            // Ícone do menu de criação do novo diretório
+            ImageIcon iconNewDirectory = new ImageIcon("icons/newFolder.png");
+            String newFolder = JOptionPane.showInputDialog(this, "Escolha o nome para o novo diretório", "Novo diretório", 1, iconNewDirectory, null, "").toString();
+            // Pega o valor que o usuário digitou
+            if (!newFolder.equals("") || newFolder != null) {
+                // Cria novo diretório, e atualiza a lista
+                ClientSide.dos.writeUTF("mkdir");
+                ClientSide.dos.writeUTF(Users.getPwd() + newFolder);
+                Users.setPwd(Users.getPwd() + newFolder + "/");
+                refreshJList();
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_newDirectoryActionPerformed
+
+    public static void copyFile(File source, File destination) throws IOException {
         // Se existe o destino, limpe o caminho para não ocorrer qualquer conflito
-        if (destination.exists())
+        if (destination.exists()) {
             destination.delete();
-        
+        }
+
         FileChannel sourceChannel = null;
         FileChannel destinationChannel = null;
 
@@ -370,33 +389,34 @@ public class telaUsuario extends javax.swing.JFrame {
             sourceChannel.transferTo(0, sourceChannel.size(),
                     destinationChannel);
         } finally {
-            if (sourceChannel != null && sourceChannel.isOpen())
+            if (sourceChannel != null && sourceChannel.isOpen()) {
                 sourceChannel.close();
-            if (destinationChannel != null && destinationChannel.isOpen())
+            }
+            if (destinationChannel != null && destinationChannel.isOpen()) {
                 destinationChannel.close();
-       }
+            }
+        }
     }
-    
+
     // Essa função basicamente vai fazer um refresh de todos os valores da JList
-    public void refreshJList()
-    {
+    public void refreshJList() throws IOException {
+        ClientSide.dos.writeUTF("ls");
+        ClientSide.dos.writeUTF(Users.getPwd());
+        String dados = ClientSide.dis.readUTF();
+        String strings[] = dados.split("\n");
         DefaultListModel dlm = new DefaultListModel();
-        // Lista todos os diretórios e arquivos dentro de um pai
-        String[] strings = new File(Users.getPathAtual()).list();
         // Adiciona todos eles ao modelo da lista
-        for (String string : strings)
-        {
+        for (String string : strings) {
             dlm.addElement(string);
         }
         // Set a JList com aquele modelo
         listaDir.setModel(dlm);
         verificaButton();
         // Altera a label que diz o diretório atual do usuário
-        jLabel1.setText(Users.getPathAtual().replace(Users.path, ""));
+        Users.setPwd(Users.getPwd().replace("\\", "/"));
+        jLabel1.setText(Users.getPwd().replace(Users.path, ""));
     }
-    
-    
-    
+
     /**
      * @param args the command line arguments
      */
@@ -441,20 +461,16 @@ public class telaUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JPopupMenu jPopupMenu3;
     private javax.swing.JPopupMenu jPopupMenu4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listaDir;
+    private javax.swing.JButton newDirectory;
     private javax.swing.JLabel nomeUser;
     private javax.swing.JButton upload;
     // End of variables declaration//GEN-END:variables

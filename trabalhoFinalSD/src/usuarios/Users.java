@@ -6,19 +6,19 @@ package usuarios;
  */
 public class Users {
     private static String nome;
-    private static String pathAtual;
-    public static String path = "C:\\Users\\renan\\OneDrive\\Documentos\\trabDrive\\";
-    // Minha do Windows = C:\\Users\\renan\\OneDrive\\Documentos\\trabDrive\\
+    private static String pwd;
+    public static String path = "/home/rvip/trabalhoSD/";
+    // Minha do Windows = C:/Users/renan/OneDrive/Documentos/trabDrive/
     // Minha do Linux = /home/renan/trabDrive/
     // Altere essa variável para o seu path padrão
     // (onde vão ficar os arquivos do server)
 
-    public static String getPathAtual() {
-        return pathAtual;
+    public static String getPwd() {
+        return pwd;
     }
 
-    public static void setPathAtual(String pathAtual) {
-        Users.pathAtual = pathAtual;
+    public static void setPwd(String pathAtual) {
+        Users.pwd = pathAtual;
     }
 
     public static String getNome() {
@@ -28,5 +28,6 @@ public class Users {
     public static void setNome(String nome) {
         Users.nome = nome;
     }
+    
     
 }

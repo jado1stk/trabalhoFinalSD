@@ -1,9 +1,14 @@
 package trabalhofinalsd;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import senha.Senhas;
 import usuarios.Users;
+import utfbox.ClientSide;
+import utfbox.ServerSide;
 
 /**
  *
@@ -11,12 +16,20 @@ import usuarios.Users;
  */
 public class telaLogin extends javax.swing.JFrame {
 
+    public boolean logged = false;
+    static boolean initConect = true;
+
     /**
      * Creates new form telaLogin
      */
-    public telaLogin() {
+    public telaLogin() throws Exception {
+
         initComponents();
+        if (initConect) {
+            ClientSide.main(null);
+        }
         setLocationRelativeTo(this);
+        initConect = false;
     }
 
     /**
@@ -40,6 +53,11 @@ public class telaLogin extends javax.swing.JFrame {
         setAlwaysOnTop(true);
         setName("frmLogin"); // NOI18N
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Login:");
 
@@ -106,36 +124,36 @@ public class telaLogin extends javax.swing.JFrame {
         pass = pass.replace("]", "");
         pass = pass.replace(",", "");
         pass = pass.replace(" ", "");
-        try
-        {
+        try {
+            ClientSide.dos.writeUTF("verifica");
+            ClientSide.dos.writeUTF(txtLogin.getText());
+            ClientSide.dos.writeUTF(pass);
+            String existe = ClientSide.dis.readUTF();
             // Verifica se é o Server
             // Ainda falta dar um nome e senha decente pra isso aqui
             // E provavelmente não deve estar funcionando mesmo
-            if(txtLogin.getText().equals("admin") && pass.equals("admin")){
+            if (txtLogin.getText().equals("admin") && pass.equals("admin")) {
                 telaServidor ts = new telaServidor();
                 ts.setVisible(true);
-            }
-            // Se ele conseguir encontrar um usuário e senha compativeis...
-            else if(senha.verificaUsers(txtLogin.getText(), pass))
-            {
+                dispose();
+            } // Se ele conseguir encontrar um usuário e senha compativeis...
+            else if (existe.toLowerCase().equals("true")) {
+
                 // Faz o login
                 Users.setNome(txtLogin.getText());
-                Users.setPathAtual(Users.path + Users.getNome() + "/");
+                Users.setPwd(Users.path + Users.getNome() + "/");
                 // Classe Cliente
                 telaUsuario tu = new telaUsuario();
                 tu.setVisible(true);
                 dispose();
-            }
-            else
-            {
+            } else {
                 // Mensagenzinha se ocorrer cagada
                 JOptionPane.showMessageDialog(null, "<html><b>Desculpe-nos, ocorreu um erro.</b><br>Algumas das coisas que podem ter ocorrido errado:"
                         + "<ul><li>Você pode ter digitado seu usuário errado (tome cuidado com letras maiúsculas);</li>"
                         + "<li>Você pode ter digitado sua senha errada.</li></ul></html>", "Algo deu errado", 0);
             }
-        }catch(Exception e)
-        {
-            System.out.println(e);
+        } catch (IOException ex) {
+            Logger.getLogger(telaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btEntrarActionPerformed
 
@@ -145,6 +163,18 @@ public class telaLogin extends javax.swing.JFrame {
         tr.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+
+        try {
+            ClientSide.dos.writeUTF("quit");
+            ClientSide.dis.close();
+            ClientSide.soc.close();
+            ClientSide.dos.close();
+        } catch (IOException ex) {
+            Logger.getLogger(telaLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -176,7 +206,11 @@ public class telaLogin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new telaLogin().setVisible(true);
+                try {
+                    new telaLogin().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(telaLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

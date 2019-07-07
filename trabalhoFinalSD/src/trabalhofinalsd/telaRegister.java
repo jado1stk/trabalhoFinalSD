@@ -3,10 +3,14 @@ package trabalhofinalsd;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import senha.Senhas;
 import usuarios.Users;
+import utfbox.ClientSide;
 
 /**
  *
@@ -42,6 +46,11 @@ public class telaRegister extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registre-se");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Nome de usuário:");
 
@@ -90,7 +99,7 @@ public class telaRegister extends javax.swing.JFrame {
                     .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(register, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                    .addComponent(register, javax.swing.GroupLayout.PREFERRED_SIZE, 102, Short.MAX_VALUE)
                     .addComponent(returnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -131,47 +140,63 @@ public class telaRegister extends javax.swing.JFrame {
         pass = pass.replace("]", "");
         pass = pass.replace(",", "");
         pass = pass.replace(" ", "");
-        Senhas m = new Senhas();
-        try {
-            if(userName.getText().length() > 2 && Arrays.equals(password.getPassword(), confirmPass.getPassword()) && !m.verificaUsers(userName.getText(), pass) && pass.length() > 7)
-            {
-                // Lê o arquivo users.txt
-                FileWriter fw = new FileWriter(Users.path + "users.txt", true);
-                BufferedWriter con = new BufferedWriter(fw);
-                // Criptografa a Senha com um Hash MD5 padrão
-                String s = userName.getText() + " " + m.getMd5(pass);
-                con.write(s);
-                con.newLine();
-                con.close();
-                // Escreve tudo o que tinha pra escrever no users.txt
-                // Cria um diretório para o usuário e loga ele
-                Users.setPathAtual(Users.path + userName.getText() + "/");
-                Users.setNome(userName.getText());
-                new File(Users.getPathAtual()).mkdirs();
-                telaUsuario tu = new telaUsuario();
-                tu.setVisible(true);
-                this.dispose();
+        if (userName.getText().length() > 2 && Arrays.equals(password.getPassword(), confirmPass.getPassword()) && pass.length() > 7 && !userName.getText().contains(" ") && !pass.contains(" ")) {
+            try {
+
+                ClientSide.dos.writeUTF("criauser");
+                ClientSide.dos.writeUTF(userName.getText());
+                ClientSide.dos.writeUTF(pass);
+                Users.setPwd(ClientSide.dis.readUTF());
+                if (Users.getPwd().equals("false")) {
+                    Users.setPwd("");
+                    JOptionPane.showMessageDialog(null, "<html><b>Desculpe-nos, ocorreu um erro.</b><br>Algumas das coisas que podem ter ocorrido errado:"
+                            + "<ul><li>Seu nome de usuário precisa ter no mínimo 3 caracteres;</li>"
+                            + "<li>Seu nome de usuário já está em uso;</li>"
+                            + "<li>A senha deve possuir no mínimo 8 caracteres, e não pode conter <i>espaços</i>;</li>"
+                            + "<li>As senhas não coincidem.</li></ul></html>", "Algo deu errado", 0);
+                }
+                else
+                {
+                    Users.setNome(userName.getText());
+                    telaUsuario tu = new telaUsuario();
+                    tu.setVisible(true);
+                    this.dispose();
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(telaRegister.class.getName()).log(Level.SEVERE, null, ex);
             }
-            else
-            {
-                // Mensagenzinha de erro, caso ele digite algo errado
-                JOptionPane.showMessageDialog(null, "<html><b>Desculpe-nos, ocorreu um erro.</b><br>Algumas das coisas que podem ter ocorrido errado:"
-                        + "<ul><li>Seu nome de usuário precisa ter no mínimo 3 caracteres;</li>"
-                        + "<li>Seu nome de usuário já está em uso;</li>"
-                        + "<li>A senha deve possuir no mínimo 8 caracteres;</li>"
-                        + "<li>As senhas não coincidem.</li></ul></html>", "Algo deu errado", 0);
-            }
-        } catch (Exception ex) {
-            System.out.println(ex);
+        } else {
+            JOptionPane.showMessageDialog(null, "<html><b>Desculpe-nos, ocorreu um erro.</b><br>Algumas das coisas que podem ter ocorrido errado:"
+                    + "<ul><li>Seu nome de usuário precisa ter no mínimo 3 caracteres;</li>"
+                    + "<li>Seu nome de usuário já está em uso;</li>"
+                    + "<li>A senha deve possuir no mínimo 8 caracteres, e não pode conter <i>espaços</i>;</li>"
+                    + "<li>As senhas não coincidem.</li></ul></html>", "Algo deu errado", 0);
         }
+
     }//GEN-LAST:event_registerActionPerformed
 
     private void returnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnLoginActionPerformed
         // Apenas retorna a tela de login se o usuário quiser logar
-        telaLogin tl = new telaLogin();
-        tl.setVisible(true);
+        telaLogin tl;
+        try {
+            tl = new telaLogin();
+            tl.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(telaRegister.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.dispose();
     }//GEN-LAST:event_returnLoginActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            ClientSide.dos.writeUTF("quit");
+            ClientSide.dis.close();
+            ClientSide.soc.close();
+            ClientSide.dos.close();
+        } catch (IOException ex) {
+            Logger.getLogger(telaLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
