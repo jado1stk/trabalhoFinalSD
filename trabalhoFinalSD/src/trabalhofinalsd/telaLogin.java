@@ -1,5 +1,6 @@
 package trabalhofinalsd;
 
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -9,6 +10,9 @@ import senha.Senhas;
 import usuarios.Users;
 import utfbox.ClientSide;
 import utfbox.ServerSide;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+
 
 /**
  *
@@ -70,10 +74,20 @@ public class telaLogin extends javax.swing.JFrame {
             }
         });
 
+
         jButton1.setText("Registre-se");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+        txtLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLoginKeyPressed(evt);
+            }
+        });
+
+        txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSenhaKeyPressed(evt);
             }
         });
 
@@ -116,6 +130,7 @@ public class telaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarActionPerformed
+
         // Por algum motivo essa merda me traz assim [valor1, valor2]
         // Tirei a força isso
         Senhas senha = new Senhas();
@@ -156,6 +171,37 @@ public class telaLogin extends javax.swing.JFrame {
             Logger.getLogger(telaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btEntrarActionPerformed
+
+        // TODO add your handling code here:
+        entrar();
+    }//GEN-LAST:event_btEntrarActionPerformed
+
+    public void entrar(){
+        if(txtLogin.getText().equals("admin") && txtSenha.getText().equals("admin")){
+            System.out.println("Logado como admin");
+            telaServidor ts = new telaServidor();
+            ts.setVisible(true);
+        }  
+        else{
+           System.out.println("Sai daqui plebeu"); 
+           telaUsuario tu = new telaUsuario();
+           tu.setVisible(true);
+        }
+        this.dispose();
+    }
+    
+    private void txtSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            entrar();
+        }
+    }//GEN-LAST:event_txtSenhaKeyPressed
+
+    private void txtLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoginKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            entrar();
+        }
+    }//GEN-LAST:event_txtLoginKeyPressed
+
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Manda pra tela de registro de usuário

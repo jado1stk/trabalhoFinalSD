@@ -33,7 +33,11 @@ public class telaServidor extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
 
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -64,6 +68,7 @@ public class telaServidor extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
+
         telaLogin tl;
         try {
             tl = new telaLogin();
@@ -71,6 +76,11 @@ public class telaServidor extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(telaServidor.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        telaLogin tl = new telaLogin();
+        tl.setVisible(true);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     }//GEN-LAST:event_formWindowClosing
 
     /**

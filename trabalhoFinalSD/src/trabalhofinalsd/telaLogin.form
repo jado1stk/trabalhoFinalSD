@@ -89,7 +89,11 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLogin">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtLoginKeyPressed"/>
+      </Events>
     </Component>
+
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Registre-se"/>
@@ -99,6 +103,10 @@
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="txtSenha">
+    <Component class="javax.swing.JTextField" name="txtSenha">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtSenhaKeyPressed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

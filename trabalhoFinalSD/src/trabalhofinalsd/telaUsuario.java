@@ -1,5 +1,6 @@
 package trabalhofinalsd;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,6 +17,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
 import usuarios.Users;
 import utfbox.ClientSide;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
@@ -110,10 +115,17 @@ public class telaUsuario extends javax.swing.JFrame {
             }
         });
 
+
         upload.setText("Upload");
         upload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 uploadActionPerformed(evt);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+
             }
         });
 
@@ -199,6 +211,7 @@ public class telaUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+
         // Quando fechar a janela
         // Ao invés de fechar a aplicação,
         // O usuário é levado a tela de login.
@@ -503,6 +516,13 @@ public class telaUsuario extends javax.swing.JFrame {
         Users.setPwd(Users.getPwd().replace("\\", "/"));
         jLabel1.setText(Users.getPwd().replace(Users.path, ""));
     }
+
+
+        telaLogin tl = new telaLogin();
+        tl.setVisible(true);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_formWindowClosing
+
 
     /**
      * @param args the command line arguments
