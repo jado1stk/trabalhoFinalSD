@@ -234,18 +234,40 @@ public class telaUsuario extends javax.swing.JFrame {
 
     public void verificaButton() throws IOException {
         // Verifica quais botões podem ser usados no contexo atual
-        if (isDir()) {
-            btnShare.setEnabled(false);
-        } else {
-            btnShare.setEnabled(true);
-        }
-        String pwd = Users.getPwd();
-        pwd = pwd.replaceAll(Users.path, "");
-        //System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
-        if (pwd.equals(Users.getNome() + "/")) {
+        if (Users.compatilhado) {
             backDir.setEnabled(false);
+            newDirectory.setEnabled(false);
+            btnShare.setEnabled(false);
+            upload.setEnabled(false);
+            if (!listaDir.isSelectionEmpty()) {
+                btnDeleteDir.setEnabled(true);
+            } else {
+                btnDeleteDir.setEnabled(false);
+            }
         } else {
-            backDir.setEnabled(true);
+            if (Users.getPwd().equals(Users.path + Users.getNome() + "/")) {
+                backDir.setEnabled(false);
+            } else {
+                backDir.setEnabled(true);
+            }
+
+            newDirectory.setEnabled(true);
+            upload.setEnabled(true);
+            if (!listaDir.isSelectionEmpty()) {
+                btnDeleteDir.setEnabled(true);
+                if(isDir())
+                {
+                    btnShare.setEnabled(false);
+                }
+                else
+                {
+                    btnShare.setEnabled(true);
+                }
+                
+            } else {
+                btnDeleteDir.setEnabled(false);
+                btnShare.setEnabled(false);
+            }
         }
     }
 
@@ -387,20 +409,19 @@ public class telaUsuario extends javax.swing.JFrame {
 
     private void btnSharedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSharedActionPerformed
         try {
-            if (!Users.compatilhado) {
-                backDir.setEnabled(false);
-                Users.setPwd(Users.path);
+            Users.compatilhado = !Users.compatilhado;
+            verificaButton();
+            if(Users.compatilhado)
+            {
                 btnCompartilhado();
-            } else {
-                Users.setPwd(Users.path + Users.getNome() + "/");
-                //Não compartilhado
+            }
+            else
+            {
                 refreshJList();
             }
-            Users.compatilhado = !Users.compatilhado;
         } catch (IOException ex) {
-            System.out.println("" + ex);
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_btnSharedActionPerformed
 
     private void btnDeleteDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteDirActionPerformed
@@ -455,36 +476,6 @@ public class telaUsuario extends javax.swing.JFrame {
         verificaButton();
     }
 
-    public static void copyFile(File source, File destination) throws IOException {
-        // Se existe o destino, limpe o caminho para não ocorrer qualquer conflito
-        if (destination.exists()) {
-            destination.delete();
-        }
-
-        FileChannel sourceChannel = null;
-        FileChannel destinationChannel = null;
-
-        // Cria os canais de comunicação e transfere bit a bit os valores do arquivo
-        // Não importa o tipo do arquivo, vai funcionar
-        // Pra falar a verdade, não testei com diretórios
-        // Mas creio que não vai funcionar, então bloqueei
-        // Provavelmente não funciona pq precisaria baixar recursivamente
-        // Tudo que tem dentro do diretório
-        try {
-            sourceChannel = new FileInputStream(source).getChannel();
-            destinationChannel = new FileOutputStream(destination).getChannel();
-            sourceChannel.transferTo(0, sourceChannel.size(),
-                    destinationChannel);
-        } finally {
-            if (sourceChannel != null && sourceChannel.isOpen()) {
-                sourceChannel.close();
-            }
-            if (destinationChannel != null && destinationChannel.isOpen()) {
-                destinationChannel.close();
-            }
-        }
-    }
-
     // Essa função basicamente vai fazer um refresh de todos os valores da JList
     public void refreshJList() throws IOException {
         ClientSide.dos.writeUTF("ls");
@@ -496,6 +487,10 @@ public class telaUsuario extends javax.swing.JFrame {
         for (String string : strings) {
             dlm.addElement(string);
         }
+        if (dados.equals("") || dados.isEmpty()) {
+            dlm.clear();
+        }
+        
         // Set a JList com aquele modelo
         listaDir.setModel(dlm);
         verificaButton();

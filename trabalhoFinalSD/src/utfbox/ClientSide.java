@@ -18,7 +18,7 @@ public class ClientSide {
     
     //creating object of socket class which requires IP address of Server and port number 
     //String IpAdd = "192.168.0.181";
-    public static String IpAdd = "192.168.1.21";
+    public static String IpAdd = "10.51.247.217";
     public static int portNum = 9999;
     public static int tport = 9998;
     public static Socket soc;
@@ -147,7 +147,7 @@ public class ClientSide {
         long fileSize = putFile.length();
         dos.writeLong(fileSize);
         int asciiValOfChar = 0;
-        byte[] bytes = new byte[1000];
+        byte[] bytes = new byte[10000000];
 
         while ((asciiValOfChar = fis.read(bytes)) > 0) {
             if (!commandIDs.contains(commandID)) {
@@ -225,7 +225,7 @@ class clientHandler extends ClientSide implements Runnable {
         long fileSize = putFile.length();
         dos.writeLong(fileSize);
         int asciiValOfChar = 0;
-        byte[] bytes = new byte[1000];
+        byte[] bytes = new byte[10000000];
 
         while ((asciiValOfChar = fis.read(bytes)) > 0) {
             if (!commandIDs.contains(commandID)) {
@@ -263,7 +263,7 @@ class clientHandler extends ClientSide implements Runnable {
         //String newDir = path.substring(path.lastIndexOf('/')+1);
         File getFile = new File(command[1]);
         FileOutputStream fos = new FileOutputStream(getFile);
-        byte[] bytes = new byte[1000];
+        byte[] bytes = new byte[10000000];
 
         int count;
         int readSum = 0;
