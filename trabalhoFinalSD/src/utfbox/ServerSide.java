@@ -1,13 +1,21 @@
 package utfbox;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Deque;
@@ -18,6 +26,10 @@ import java.util.Map;
 import java.util.Set;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import senha.Senhas;
 import usuarios.Users;
 
@@ -131,7 +143,10 @@ public class ServerSide {
                             
                         case "delete":
                             String deletePath = dis.readUTF();
-                            delete(deletePath);
+                            String compartilhado = dis.readUTF();
+                            String pathArquivo = dis.readUTF();
+                            Boolean excluiu = delete(deletePath, compartilhado, pathArquivo);
+                            dos.writeUTF(excluiu.toString());
                             break;
                         case "put":
                             String name = dis.readUTF();
@@ -399,7 +414,7 @@ public class ServerSide {
             System.out.println("created directory: " + newDir);
         }
 
-        boolean delete(String deletePath) throws Exception {
+        Boolean delete(String deletePath, String compartilhado, String pathArquivo) throws Exception {
             File file = new File(deletePath);
             if (file.exists()) {
                 if(file.isDirectory())
@@ -410,10 +425,82 @@ public class ServerSide {
                         currentFile.delete();
                     }
                 }
+                if(compartilhado.equals("true")){
+                    System.out.println("" + deletePath);
+                    removeLineFromFile(pathArquivo, deletePath);
+                    /*System.out.println("path" + pathArquivo);
+                    FileReader fileReader = new FileReader(pathArquivo);
+                    FileWriter writer = new FileWriter(pathArquivo, true);
+                    BufferedWriter con = new BufferedWriter(writer);
+                    String caminhos = "";
+                    try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+                        String linha = null;
+                        while ((linha = bufferedReader.readLine()) != null) {
+                            if (!linha.equals(deletePath)) {
+                                caminhos += linha + "\n";
+                            }
+                        }
+                        con.write(caminhos);
+                        con.close();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }*/
+                }
                 file.delete();
                 return true;
             } else {
                 return false;
+            }
+        }
+        
+        public void removeLineFromFile(String file, String lineToRemove) {
+
+            try {
+
+              File inFile = new File(file);
+
+              if (!inFile.isFile()) {
+                System.out.println("Parameter is not an existing file");
+                return;
+              }
+
+              //Construct the new file that will later be renamed to the original filename.
+              File tempFile = new File(inFile.getAbsolutePath() + ".tmp");
+
+              BufferedReader br = new BufferedReader(new FileReader(file));
+              PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
+
+              String line = null;
+
+              //Read from the original file and write to the new
+              //unless content matches data to be removed.
+              while ((line = br.readLine()) != null) {
+
+                if (!line.trim().equals(lineToRemove)) {
+
+                  pw.println(line);
+                  pw.flush();
+                }
+              }
+              pw.close();
+              br.close();
+
+              //Delete the original file
+              if (!inFile.delete()) {
+                System.out.println("Could not delete file");
+                return;
+              }
+
+              //Rename the new file to the filename the original file had.
+              if (!tempFile.renameTo(inFile))
+                System.out.println("Could not rename file");
+
+            }
+            catch (FileNotFoundException ex) {
+              ex.printStackTrace();
+            }
+            catch (IOException ex) {
+              ex.printStackTrace();
             }
         }
 
