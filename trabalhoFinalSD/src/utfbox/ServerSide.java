@@ -1,6 +1,7 @@
 package utfbox;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -13,12 +14,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import senha.Senhas;
 import usuarios.Users;
 
@@ -345,7 +356,7 @@ public class ServerSide {
             long fileSize = dis.readLong();
 
             try (FileOutputStream fos = new FileOutputStream(putFile)) {
-                byte[] bytes = new byte[10000000];
+                byte[] bytes = new byte[1000];
 
                 int count;
                 int readSum = 0;

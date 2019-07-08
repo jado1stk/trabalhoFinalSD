@@ -147,7 +147,7 @@ public class ClientSide {
         long fileSize = putFile.length();
         dos.writeLong(fileSize);
         int asciiValOfChar = 0;
-        byte[] bytes = new byte[10000000];
+        byte[] bytes = new byte[1000];
 
         while ((asciiValOfChar = fis.read(bytes)) > 0) {
             if (!commandIDs.contains(commandID)) {
@@ -225,7 +225,7 @@ class clientHandler extends ClientSide implements Runnable {
         long fileSize = putFile.length();
         dos.writeLong(fileSize);
         int asciiValOfChar = 0;
-        byte[] bytes = new byte[10000000];
+        byte[] bytes = new byte[1000];
 
         while ((asciiValOfChar = fis.read(bytes)) > 0) {
             if (!commandIDs.contains(commandID)) {
@@ -263,7 +263,7 @@ class clientHandler extends ClientSide implements Runnable {
         //String newDir = path.substring(path.lastIndexOf('/')+1);
         File getFile = new File(command[1]);
         FileOutputStream fos = new FileOutputStream(getFile);
-        byte[] bytes = new byte[10000000];
+        byte[] bytes = new byte[1000];
 
         int count;
         int readSum = 0;
