@@ -1,12 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trabalhofinalsd;
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.io.FilenameUtils;
+import usuarios.Users;
+import utfbox.ClientSide;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
@@ -19,7 +33,14 @@ public class telaUsuario extends javax.swing.JFrame {
      */
     public telaUsuario() {
         initComponents();
+        //Coloca a janela no centro da tela
         setLocationRelativeTo(this);
+        try {
+            refreshJList();
+            //System.out.println(Arrays.toString(new File(Users.getPathAtual()).list()));
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -31,42 +52,477 @@ public class telaUsuario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFileChooser1 = new javax.swing.JFileChooser();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu6 = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPopupMenu2 = new javax.swing.JPopupMenu();
+        jPopupMenu3 = new javax.swing.JPopupMenu();
+        jPopupMenu4 = new javax.swing.JPopupMenu();
+        nomeUser = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaDir = new javax.swing.JList<>();
+        backDir = new javax.swing.JButton();
+        upload = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        newDirectory = new javax.swing.JButton();
+        btnShared = new javax.swing.JToggleButton();
+        btnShare = new javax.swing.JButton();
+        btnDeleteDir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jMenu1.setText("jMenu1");
+
+        jMenu2.setText("jMenu2");
+
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
+
+        jMenu6.setText("File");
+        jMenuBar2.add(jMenu6);
+
+        jMenu7.setText("Edit");
+        jMenuBar2.add(jMenu7);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        jLabel1.setText("Caraca tu é o usuario manipulado, tu é um bosta");
+        nomeUser.setText("<html>Logado como:<b> " + Users.getNome() + "</b></html>");
+
+        listaDir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaDirMouseClicked(evt);
+            }
+        });
+        listaDir.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listaDirValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listaDir);
+
+        backDir.setText("Voltar");
+        backDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backDirActionPerformed(evt);
+            }
+        });
+
+
+        upload.setText("Upload");
+        upload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadActionPerformed(evt);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+
+            }
+        });
+
+        jLabel1.setText(Users.getPwd().replace(Users.path, ""));
+
+        newDirectory.setText("Novo Diretório");
+        newDirectory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newDirectoryActionPerformed(evt);
+            }
+        });
+
+        btnShared.setText("Compartilhado");
+        btnShared.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSharedActionPerformed(evt);
+            }
+        });
+
+        btnShare.setText("Compartilhar");
+        btnShare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShareActionPerformed(evt);
+            }
+        });
+
+        btnDeleteDir.setText("Apagar Diretorio");
+        btnDeleteDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteDirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(181, 181, 181)
-                .addComponent(jLabel1)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnShared)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(backDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(nomeUser)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnShare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDeleteDir, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(202, 202, 202)
-                .addComponent(jLabel1)
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nomeUser)
+                    .addComponent(jLabel1)
+                    .addComponent(btnShared))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(backDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(newDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDeleteDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnShare, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(103, 103, 103)
+                        .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+
+        // Quando fechar a janela
+        // Ao invés de fechar a aplicação,
+        // O usuário é levado a tela de login.
+        telaLogin tl;
+        try {
+            tl = new telaLogin();
+            tl.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    private void backDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backDirActionPerformed
+        // Pega o ultimo diretório e apaga ele do pathAtual
+        String pwd = new File(Users.getPwd()).getName() + "/";
+        Users.setPwd(Users.getPwd().replace(pwd, ""));
+        try {
+            refreshJList();
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_backDirActionPerformed
+
+    private void listaDirValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaDirValueChanged
+        try {
+            // Quando é realizada alguma alteração no valor da lista
+            // Atualiza quais botões podem ser clicados
+            verificaButton();
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_listaDirValueChanged
+
+    public void verificaButton() throws IOException {
+        // Verifica quais botões podem ser usados no contexo atual
+        if (isDir()) {
+            btnShare.setEnabled(false);
+        } else {
+            btnShare.setEnabled(true);
+        }
+        String pwd = Users.getPwd();
+        pwd = pwd.replaceAll(Users.path, "");
+        //System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
+        if (pwd.equals(Users.getNome() + "/")) {
+            backDir.setEnabled(false);
+        } else {
+            backDir.setEnabled(true);
+        }
+    }
+
+    public Boolean isDir() throws IOException {
+        ClientSide.dos.writeUTF("isdir");
+        ClientSide.dos.writeUTF(Users.getPwd() + listaDir.getSelectedValue());
+        String isDir = ClientSide.dis.readUTF();
+        return isDir.toLowerCase().equals("true");
+    }
+
+    public void download() throws IOException {
+        try {
+            // Chama FileChooser e espera o usuário informar o diretório e nome do arquivo
+            JFileChooser to = new JFileChooser();
+            // Pega a extensão do arquivo
+            String extension = FilenameUtils.getExtension(Users.getPwd() + listaDir.getSelectedValue());
+            FileFilter ff = new FileNameExtensionFilter("Arquivo " + extension.toUpperCase(), extension);
+            // Proibe o usuário de selecionar um diretório
+            to.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            // Set nome inicial do arquivo automaticamente
+            to.setSelectedFile(new File(listaDir.getSelectedValue().replace("." + extension, "")));
+            // Seta como default o tipo do arquivo que o usuário selecionou
+            to.setFileFilter(ff);
+            int result = to.showSaveDialog(this);
+            //System.out.println("Caminho: " + Users.getPathAtual() + "/" + listaDir.getSelectedValue());
+            String from;
+            if (Users.getPwd().endsWith("/")) {
+                from = Users.getPwd() + listaDir.getSelectedValue();
+            } else {
+                from = Users.getPwd() + "/" + listaDir.getSelectedValue();
+            }
+            System.out.println(from);
+            // Se o usuário selecionou tudo certinho, copia o arquivo para onde ele selecionou
+            if (result == 0) {
+                System.out.println(to.getSelectedFile().toString() + "." + extension);
+                ClientSide.dos.writeUTF("get");
+                ClientSide.dos.writeUTF(from);
+                ClientSide.get(ClientSide.dis, ClientSide.soc, to.getSelectedFile().toPath().toString() + "." + extension);
+                ClientSide.dos.flush();
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    private void uploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadActionPerformed
+        // Usuário pode selecionar o arquivo
+        JFileChooser from = new JFileChooser();
+        from.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int result = from.showSaveDialog(null);
+        File to = new File(Users.getPwd() + from.getSelectedFile().getName());
+        // Se ele selecionou certo, copia o arquivo para o server
+        if (result == 0) {
+            try {
+                ClientSide.dos.writeUTF("put");
+                ClientSide.dos.writeUTF(to.toString());//arquivo.txt
+                System.out.println("from: " + from.getSelectedFile().toPath().toString());
+                System.out.println("to: " + to.toString());
+                ClientSide.put(ClientSide.dis, ClientSide.soc, from.getSelectedFile().toPath().toString());
+            } catch (Exception ex) {
+                Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        try {
+            refreshJList();
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_uploadActionPerformed
+
+    private void listaDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaDirMouseClicked
+        // Se dar dois cliques com o mouse
+        if (evt.getClickCount() >= 2) {
+            // Se é um diretório
+            if (!Users.compatilhado) {
+                try {
+                    if (isDir()) {
+                        Users.setPwd(Users.getPwd() + listaDir.getSelectedValue() + "/");
+
+                        refreshJList();
+                    } else {
+                        download();
+                    }
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+            } else {
+                if (!listaDir.isSelectionEmpty()) {
+                    try {
+                        download();
+                    } catch (IOException ex) {
+                        System.out.println(ex);
+                    }
+                }
+            }
+
+        }
+    }//GEN-LAST:event_listaDirMouseClicked
+
+    private void newDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newDirectoryActionPerformed
+        try {
+            // Ícone do menu de criação do novo diretório
+            ImageIcon iconNewDirectory = new ImageIcon("icons/newFolder.png");
+            String newFolder = JOptionPane.showInputDialog(this, "Escolha o nome para o novo diretório", "Novo diretório", 1, iconNewDirectory, null, "").toString();
+            // Pega o valor que o usuário digitou
+            if (!newFolder.equals("") || newFolder != null) {
+                // Cria novo diretório, e atualiza a lista
+                ClientSide.dos.writeUTF("mkdir");
+                ClientSide.dos.writeUTF(Users.getPwd() + newFolder);
+                Users.setPwd(Users.getPwd() + newFolder + "/");
+                refreshJList();
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_newDirectoryActionPerformed
+
+    public String getfile() {
+        return Users.getPwd() + listaDir.getSelectedValue();
+    }
+
+    private void btnShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShareActionPerformed
+        try {
+            String usuario = JOptionPane.showInputDialog("Nome do usuário com quem vai compartilhar");
+            if (usuario == null || usuario.equals("")) {
+                JOptionPane.showMessageDialog(this, "Digite o nome do usuário");
+            } else {
+                ClientSide.dos.writeUTF("compartilhar");//funcao
+                ClientSide.dos.writeUTF(usuario);//com quem
+                ClientSide.dos.writeUTF(getfile());//o que
+                System.out.println("Arquivo compartilhado");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnShareActionPerformed
+
+
+    private void btnSharedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSharedActionPerformed
+        try {
+            if (!Users.compatilhado) {
+                backDir.setEnabled(false);
+                Users.setPwd(Users.path);
+                btnCompartilhado();
+            } else {
+                Users.setPwd(Users.path + Users.getNome() + "/");
+                //Não compartilhado
+                refreshJList();
+            }
+            Users.compatilhado = !Users.compatilhado;
+        } catch (IOException ex) {
+            System.out.println("" + ex);
+        }
+
+    }//GEN-LAST:event_btnSharedActionPerformed
+
+    private void btnDeleteDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteDirActionPerformed
+        try {
+            ClientSide.dos.writeUTF("delete");
+            ClientSide.dos.writeUTF(getfile());
+            ClientSide.dos.writeUTF(Boolean.toString(Users.compatilhado));
+            ClientSide.dos.writeUTF(Users.path + Users.getNome() + ".txt");
+            String s = ClientSide.dis.readUTF();
+            if (s.equals("true")) {
+                JOptionPane.showMessageDialog(this, "Excluido com sucesso");
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha ao excluir");
+            }
+            if (!Users.compatilhado) {
+                backDir.setEnabled(false);
+                Users.setPwd(Users.path);
+                btnCompartilhado();
+            } else {
+                Users.setPwd(Users.path + Users.getNome() + "/");
+                //Não compartilhado
+                refreshJList();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDeleteDirActionPerformed
+
+    public void btnCompartilhado() throws IOException {
+        //pedir pro servidor a lista dos arquivos compartilhados
+        ClientSide.dos.writeUTF("arquivoscompartilhados");
+        ClientSide.dos.writeUTF(Users.getNome());
+        String listaarquivos = ClientSide.dis.readUTF();
+        DefaultListModel dlm = new DefaultListModel();
+        if (listaarquivos.contains(Users.path)) {
+            listaarquivos = listaarquivos.replaceAll(Users.path, "");
+            // Altera a label que diz o diretório atual do usuário
+            jLabel1.setText("Área compartilhada");
+        }
+        String strings[] = listaarquivos.split("\n");
+        // Adiciona todos eles ao modelo da lista
+        for (String string : strings) {
+            dlm.addElement(string);
+        }
+        // Set a JList com aquele modelo
+
+        if (listaarquivos.equals("false")) {
+            dlm.clear();
+
+        }
+        listaDir.setModel(dlm);
+        verificaButton();
+    }
+
+    public static void copyFile(File source, File destination) throws IOException {
+        // Se existe o destino, limpe o caminho para não ocorrer qualquer conflito
+        if (destination.exists()) {
+            destination.delete();
+        }
+
+        FileChannel sourceChannel = null;
+        FileChannel destinationChannel = null;
+
+        // Cria os canais de comunicação e transfere bit a bit os valores do arquivo
+        // Não importa o tipo do arquivo, vai funcionar
+        // Pra falar a verdade, não testei com diretórios
+        // Mas creio que não vai funcionar, então bloqueei
+        // Provavelmente não funciona pq precisaria baixar recursivamente
+        // Tudo que tem dentro do diretório
+        try {
+            sourceChannel = new FileInputStream(source).getChannel();
+            destinationChannel = new FileOutputStream(destination).getChannel();
+            sourceChannel.transferTo(0, sourceChannel.size(),
+                    destinationChannel);
+        } finally {
+            if (sourceChannel != null && sourceChannel.isOpen()) {
+                sourceChannel.close();
+            }
+            if (destinationChannel != null && destinationChannel.isOpen()) {
+                destinationChannel.close();
+            }
+        }
+    }
+
+    // Essa função basicamente vai fazer um refresh de todos os valores da JList
+    public void refreshJList() throws IOException {
+        ClientSide.dos.writeUTF("ls");
+        ClientSide.dos.writeUTF(Users.getPwd());
+        String dados = ClientSide.dis.readUTF();
+        String strings[] = dados.split("\n");
+        DefaultListModel dlm = new DefaultListModel();
+        // Adiciona todos eles ao modelo da lista
+        for (String string : strings) {
+            dlm.addElement(string);
+        }
+        // Set a JList com aquele modelo
+        listaDir.setModel(dlm);
+        verificaButton();
+        // Altera a label que diz o diretório atual do usuário
+        Users.setPwd(Users.getPwd().replace("\\", "/"));
+        jLabel1.setText(Users.getPwd().replace(Users.path, ""));
+    }
+
+
         telaLogin tl = new telaLogin();
         tl.setVisible(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }//GEN-LAST:event_formWindowClosing
+
 
     /**
      * @param args the command line arguments
@@ -104,6 +560,26 @@ public class telaUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backDir;
+    private javax.swing.JButton btnDeleteDir;
+    private javax.swing.JButton btnShare;
+    private javax.swing.JToggleButton btnShared;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JPopupMenu jPopupMenu3;
+    private javax.swing.JPopupMenu jPopupMenu4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> listaDir;
+    private javax.swing.JButton newDirectory;
+    private javax.swing.JLabel nomeUser;
+    private javax.swing.JButton upload;
     // End of variables declaration//GEN-END:variables
 }
