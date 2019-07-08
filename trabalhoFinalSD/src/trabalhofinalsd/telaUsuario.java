@@ -1,13 +1,8 @@
 package trabalhofinalsd;
 
-import java.awt.Desktop;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.logging.Level;
@@ -65,13 +60,14 @@ public class telaUsuario extends javax.swing.JFrame {
         jPopupMenu4 = new javax.swing.JPopupMenu();
         nomeUser = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listaDir = new javax.swing.JList<String>();
+        listaDir = new javax.swing.JList<>();
         backDir = new javax.swing.JButton();
         upload = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         newDirectory = new javax.swing.JButton();
         btnShared = new javax.swing.JToggleButton();
         btnShare = new javax.swing.JButton();
+        btnDeleteDir = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
@@ -144,6 +140,13 @@ public class telaUsuario extends javax.swing.JFrame {
             }
         });
 
+        btnDeleteDir.setText("Apagar Diretorio");
+        btnDeleteDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteDirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -163,8 +166,9 @@ public class telaUsuario extends javax.swing.JFrame {
                     .addComponent(newDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nomeUser)
-                        .addGap(0, 16, Short.MAX_VALUE))
-                    .addComponent(btnShare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnShare, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDeleteDir, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -183,8 +187,10 @@ public class telaUsuario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(newDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnShare, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDeleteDir, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnShare, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(103, 103, 103)
                         .addComponent(upload, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -228,10 +234,11 @@ public class telaUsuario extends javax.swing.JFrame {
 
     public void verificaButton() throws IOException {
         // Verifica quais botões podem ser usados no contexo atual
-        if(isDir())
+        if (isDir()) {
             btnShare.setEnabled(false);
-        else
+        } else {
             btnShare.setEnabled(true);
+        }
         String pwd = Users.getPwd();
         pwd = pwd.replaceAll(Users.path, "");
         //System.out.println("PWD: " + pwd + "\nPath: " + Users.getPathAtual());
@@ -313,16 +320,26 @@ public class telaUsuario extends javax.swing.JFrame {
         // Se dar dois cliques com o mouse
         if (evt.getClickCount() >= 2) {
             // Se é um diretório
-            try {
-                if (isDir()) {
-                    Users.setPwd(Users.getPwd() + listaDir.getSelectedValue() + "/");
+            if (!Users.compatilhado) {
+                try {
+                    if (isDir()) {
+                        Users.setPwd(Users.getPwd() + listaDir.getSelectedValue() + "/");
 
-                    refreshJList();
-                } else {
-                    download();
+                        refreshJList();
+                    } else {
+                        download();
+                    }
+                } catch (IOException e) {
+                    System.out.println(e);
                 }
-            } catch (IOException e) {
-                System.out.println(e);
+            } else {
+                if (!listaDir.isSelectionEmpty()) {
+                    try {
+                        download();
+                    } catch (IOException ex) {
+                        System.out.println(ex);
+                    }
+                }
             }
 
         }
@@ -346,16 +363,16 @@ public class telaUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_newDirectoryActionPerformed
 
-    public String getfile(){
+    public String getfile() {
         return Users.getPwd() + listaDir.getSelectedValue();
     }
-    
+
     private void btnShareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShareActionPerformed
         try {
             String usuario = JOptionPane.showInputDialog("Nome do usuário com quem vai compartilhar");
-            if(usuario == null || usuario.equals("")){
+            if (usuario == null || usuario.equals("")) {
                 JOptionPane.showMessageDialog(this, "Digite o nome do usuário");
-            }else{
+            } else {
                 ClientSide.dos.writeUTF("compartilhar");//funcao
                 ClientSide.dos.writeUTF(usuario);//com quem
                 ClientSide.dos.writeUTF(getfile());//o que
@@ -364,38 +381,79 @@ public class telaUsuario extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
+
     }//GEN-LAST:event_btnShareActionPerformed
 
-    
+
     private void btnSharedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSharedActionPerformed
-        try{
-            if (Users.compatilhado) {
-                //pedir pro servidor a lista dos arquivos compartilhados
-                ClientSide.dos.writeUTF("arquivoscompartilhados");
-                ClientSide.dos.writeUTF(Users.getNome());
-                String listaarquivos = ClientSide.dis.readUTF();
-                String strings[] = listaarquivos.split("\n");
-                DefaultListModel dlm = new DefaultListModel();
-                // Adiciona todos eles ao modelo da lista
-                for (String string : strings) {
-                    dlm.addElement(string);
-                }
-                // Set a JList com aquele modelo
-                listaDir.setModel(dlm);
-                verificaButton();
-                // Altera a label que diz o diretório atual do usuário
-                Users.setPwd(Users.getPwd().replace("\\", "/"));
-                jLabel1.setText("Área compartilhada");
+        try {
+            if (!Users.compatilhado) {
+                backDir.setEnabled(false);
+                Users.setPwd(Users.path);
+                btnCompartilhado();
             } else {
+                Users.setPwd(Users.path + Users.getNome() + "/");
                 //Não compartilhado
                 refreshJList();
             }
-        }catch(IOException ex){
+            Users.compatilhado = !Users.compatilhado;
+        } catch (IOException ex) {
             System.out.println("" + ex);
         }
-        
+
     }//GEN-LAST:event_btnSharedActionPerformed
+
+    private void btnDeleteDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteDirActionPerformed
+        try {
+            ClientSide.dos.writeUTF("delete");
+            ClientSide.dos.writeUTF(getfile());
+            ClientSide.dos.writeUTF(Boolean.toString(Users.compatilhado));
+            ClientSide.dos.writeUTF(Users.path + Users.getNome() + ".txt");
+            String s = ClientSide.dis.readUTF();
+            if (s.equals("true")) {
+                JOptionPane.showMessageDialog(this, "Excluido com sucesso");
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha ao excluir");
+            }
+            if (!Users.compatilhado) {
+                backDir.setEnabled(false);
+                Users.setPwd(Users.path);
+                btnCompartilhado();
+            } else {
+                Users.setPwd(Users.path + Users.getNome() + "/");
+                //Não compartilhado
+                refreshJList();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(telaUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDeleteDirActionPerformed
+
+    public void btnCompartilhado() throws IOException {
+        //pedir pro servidor a lista dos arquivos compartilhados
+        ClientSide.dos.writeUTF("arquivoscompartilhados");
+        ClientSide.dos.writeUTF(Users.getNome());
+        String listaarquivos = ClientSide.dis.readUTF();
+        DefaultListModel dlm = new DefaultListModel();
+        if (listaarquivos.contains(Users.path)) {
+            listaarquivos = listaarquivos.replaceAll(Users.path, "");
+            // Altera a label que diz o diretório atual do usuário
+            jLabel1.setText("Área compartilhada");
+        }
+        String strings[] = listaarquivos.split("\n");
+        // Adiciona todos eles ao modelo da lista
+        for (String string : strings) {
+            dlm.addElement(string);
+        }
+        // Set a JList com aquele modelo
+
+        if (listaarquivos.equals("false")) {
+            dlm.clear();
+
+        }
+        listaDir.setModel(dlm);
+        verificaButton();
+    }
 
     public static void copyFile(File source, File destination) throws IOException {
         // Se existe o destino, limpe o caminho para não ocorrer qualquer conflito
@@ -483,6 +541,7 @@ public class telaUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backDir;
+    private javax.swing.JButton btnDeleteDir;
     private javax.swing.JButton btnShare;
     private javax.swing.JToggleButton btnShared;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
